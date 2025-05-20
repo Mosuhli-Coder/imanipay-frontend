@@ -1,8 +1,13 @@
+"use client"
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 export default function Footer() {
+    const [now, setNow] = useState(0);
+    useEffect(() => {
+        setNow(Date.now())
+    },[])
     return (
         <footer className="bg-gray-900 text-white pt-16 pb-8">
             <div className="container mx-auto px-4">
@@ -111,7 +116,7 @@ export default function Footer() {
                 <div className="border-t border-gray-800 pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <p className="text-gray-400 text-sm">
-                            &copy; {new Date().getFullYear()} ImaniPay Africa. All rights reserved.
+                            &copy; {now} ImaniPay Africa. All rights reserved.
                         </p>
                         <ul className="flex space-x-6 mt-4 md:mt-0 text-gray-400 text-sm">
                             <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
