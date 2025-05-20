@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server';
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
