@@ -42,13 +42,22 @@ const Header = () => {
                             <Link href="/faq" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">FAQ</Link>
                         </li>
                         <li>
-                            <Link href="/contact" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium lg:hidden">Contact</Link>
+                            <Link href="/contact" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">Contact</Link>
+                        </li>
+                        <li>
+                            <Link href="/login" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium lg:hidden">Login</Link>
+                        </li>
+                        <li>
+                            <Link href="/register" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium lg:hidden">Register</Link>
                         </li>
                     </ul>
                 </nav>
 
                 <div className="hidden lg:block">
-                    <Link href="/contact" className="btn bg-[#01403A] text-white py-2 px-4 rounded-md">Contact Us</Link>
+                    <div className="flex gap-4">
+                        <Link href="/register" className="btn border-[#01403A] border text-[#01403A] py-2 px-4 rounded-md">Register</Link>
+                        <Link href="/login" className="btn bg-[#01403A] text-white py-2 px-4 rounded-md">Login</Link>
+                    </div>
                 </div>
             </div>
         </header>
