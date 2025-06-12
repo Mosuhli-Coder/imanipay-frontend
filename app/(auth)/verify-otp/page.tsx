@@ -73,19 +73,6 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* <div>
-              <Label htmlFor="email" className="mb-2">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div> */}
             <div>
               <Label htmlFor="otp" className="mb-2">
                 OTP
