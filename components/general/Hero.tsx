@@ -23,7 +23,7 @@ export default function Hero() {
 
                         <div className="mt-12 flex items-center">
                             <div className="flex">
-                                {[1, 2, 3, 4].map((i) => (
+                                {/* {[1, 2, 3, 4].map((i) => (
                                     <div key={i} className={`w-10 h-10 rounded-full border-2 border-white overflow-hidden -ml-${i > 1 ? 4 : 0}`}>
                                         <Image
                                             src={`https://randomuser.me/api/portraits/men/${30 + i}.jpg`}
@@ -33,7 +33,7 @@ export default function Hero() {
                                             height={100}
                                         />
                                     </div>
-                                ))}
+                                ))} */}
                             </div>
                             <div className="ml-4">
                                 <div className="flex items-center mb-1">
