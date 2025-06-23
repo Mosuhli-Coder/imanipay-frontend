@@ -71,10 +71,10 @@ export function FAQ() {
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
                             <p>
-                                ImaniPay offers a robust and developer-friendly API that enables businesses to integrate payment functionality directly into their apps, websites, or platforms. Whether you're running a SaaS platform, e-commerce store, or a mobile application, our API makes it simple to onboard users, send payouts, and collect payments.
+                                ImaniPay offers a robust and developer-friendly API that enables businesses to integrate payment functionality directly into their apps, websites, or platforms. Whether you&apos;re running a SaaS platform, e-commerce store, or a mobile application, our API makes it simple to onboard users, send payouts, and collect payments.
                             </p>
                             <p>
-                                The integration process is straightforward, and our documentation provides clear guidance for developers of all levels. Best of all, ImaniPay's transaction fees average below 1%—significantly lower than the traditional 5–10% fees charged by banks and international payment gateways.
+                                The integration process is straightforward, and our documentation provides clear guidance for developers of all levels. Best of all, ImaniPay&apos;s transaction fees average below 1%—significantly lower than the traditional 5–10% fees charged by banks and international payment gateways.
                             </p>
                         </AccordionContent>
                     </AccordionItem>
