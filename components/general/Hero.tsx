@@ -8,11 +8,10 @@ export default function Hero() {
                 <div className="flex flex-wrap items-center">
                     <div className="w-full lg:w-1/2 mb-12 lg:mb-0">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-[#01403A]">
-                            Smart Payment Solutions for <span className="gradient-text">Modern Business</span>
+                            ImaniPay: Borderless Payments, Powered by Blockchain
                         </h1>
                         <p className="text-lg text-[#2B8C7B] mb-10 max-w-lg">
-                            Streamline your payment processes with our secure, fast, and user-friendly platform designed for businesses of all sizes.
-                        </p>
+                            Instantly send money worldwide using stablecoins and mobile money. Enjoy lower fees, faster transactions, and enhanced security. Join the future of global payments with ImaniPay                        </p>
                         <div className="flex flex-wrap gap-4">
                             <Link href="/contact" className="btn bg-[#01403A] text-white py-2 px-4 rounded-md">
                                 Get Started
@@ -30,8 +29,8 @@ export default function Hero() {
                                             src={`https://randomuser.me/api/portraits/men/${30 + i}.jpg`}
                                             alt={`User ${i}`}
                                             className="w-full h-full object-cover"
-                                            width={10}
-                                            height={10}
+                                            width={100}
+                                            height={100}
                                         />
                                     </div>
                                 ))}
@@ -54,11 +53,11 @@ export default function Hero() {
                             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-primary rounded-full opacity-20"></div>
                             <div className="card-shadow rounded-xl overflow-hidden relative z-10">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                    src="/images/hero-img.jpg"
                                     alt="Payment Dashboard"
                                     className="w-full h-auto rounded-xl"
-                                    width={100}
-                                    height={100}
+                                    width={1000}
+                                    height={1000}
                                 />
                             </div>
                         </div>

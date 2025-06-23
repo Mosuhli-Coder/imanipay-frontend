@@ -33,16 +33,16 @@ const Header = () => {
                             <Link href="/" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">Home</Link>
                         </li>
                         <li>
-                            <Link href="/about" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">About</Link>
+                            <Link href="#about" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">About</Link>
                         </li>
                         <li>
-                            <Link href="/services" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">Services</Link>
+                            <Link href="#services" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">Services</Link>
                         </li>
                         <li>
-                            <Link href="/faq" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">FAQ</Link>
+                            <Link href="#faq" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">FAQ</Link>
                         </li>
                         <li>
-                            <Link href="/contact" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">Contact</Link>
+                            <Link href="#contact" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium">Contact</Link>
                         </li>
                         <li>
                             <Link href="/login" className="block py-3 px-6 text-gray-700 hover:text-primary-blue font-medium lg:hidden">Login</Link>
