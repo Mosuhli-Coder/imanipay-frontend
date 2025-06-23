@@ -67,7 +67,7 @@ export default function ContactPage() {
                     Contact <span className="text-orange-400">Us</span>
                 </h2>
                 <p className="text-lg text-gray-600">
-                    Have a question or want to get in touch? Fill out the form and we'll get back to you soon.
+                    Have a question or want to get in touch? Fill out the form and we&apos;ll get back to you soon.
                 </p>
             </div>
 
