@@ -8,13 +8,18 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useAuth } from '@/context/AuthContext';
+
 export default function RegisterPage() {
     const router = useRouter();
+    const { login } = useAuth();
 
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -23,30 +28,22 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                toast.error(data.error || 'Something went wrong');
-                return;
-            }
-
+            await login(formData.email, formData.password);
             toast.success('Login Successful!');
+
             setFormData({
                 email: '',
                 password: '',
             });
 
             router.push('/dashboard');
-        } catch (err: any) {
-            toast.error(err.message || 'Server error');
+        } catch (error: any) {
+            toast.error(error.message || 'Login failed');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -60,15 +57,31 @@ export default function RegisterPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <Label htmlFor="email" className='mb-2'>Email</Label>
-                            <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} required />
+                            <Input
+                                id="email"
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                disabled={isLoading}
+                            />
                         </div>
                         <div>
                             <Label htmlFor="password" className='mb-2'>Password</Label>
-                            <Input id="password" type="password" name="password" value={formData.password} onChange={handleChange} required />
+                            <Input
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                disabled={isLoading}
+                            />
                         </div>
 
-                        <Button type="submit" className="w-full">
-                            Login
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                            {isLoading ? 'Logging in...' : 'Login'}
                         </Button>
                     </form>
                 </CardContent>
