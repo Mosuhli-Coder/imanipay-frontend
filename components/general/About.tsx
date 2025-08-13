@@ -1,10 +1,11 @@
 import Image from 'next/image'
 import React from 'react'
 import { FiPlus, FiLock, FiUser } from 'react-icons/fi'
+import { FAQ } from "@/components/general/FAQ";
 
 export default function About() {
     return (
-        <div className="bg-gray-50">
+        <div className="bg-gray-50" id="about">
             <section className="py-16 md:py-24 bg-teal-800">
                 <div className="container mx-auto px-4">
                     <div className="max-w-3xl mx-auto text-center">
@@ -38,7 +39,7 @@ export default function About() {
                             <div className="relative">
                                 <div className="absolute -top-6 -right-6 w-24 h-24 bg-orange-300 rounded-full opacity-20"></div>
                                 <Image
-                                    src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                                    src="/images/about-img.jpg"
                                     alt="Our office"
                                     className="w-full h-[350px] rounded-xl shadow-xl object-cover"
                                     width={800}
@@ -87,6 +88,11 @@ export default function About() {
                     </div>
                 </div>
             </section>
+            <section id='faq'>
+                <FAQ />
+            </section>
+
         </div>
+
     )
 }
