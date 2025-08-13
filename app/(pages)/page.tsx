@@ -3,14 +3,17 @@ import Hero from '@/components/general/Hero'
 import About from '@/components/general/About'
 import Features from '@/components/general/Features'
 import WaitingList from '@/components/general/WaitingList'
+import PublicRoute from '@/components/auth/PublicRoute'
 
 export default function Home() {
   return (
-    <div>
-      <Hero />
-      <About />
-      <WaitingList />
-      <Features />
-    </div>
+    <PublicRoute>
+      <div>
+        <Hero />
+        <About />
+        <WaitingList />
+        <Features />
+      </div>
+    </PublicRoute>
   )
 }
