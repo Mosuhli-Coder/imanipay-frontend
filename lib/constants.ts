@@ -3,11 +3,15 @@ import {
   SmartphoneNfc,
   UserPlus,
   Wallet,
-  // Calendar,
-  // Box,
-  Users,
-  // Star,
-  LayoutDashboardIcon
+  UserRoundPen,
+  HandCoins,
+  FileStack,
+  LayoutDashboardIcon,
+  Landmark,
+  Warehouse,
+  BanknoteArrowDown,
+  SendIcon as SendFundsIcon,
+  Bell,
 } from "lucide-react";
 
 export const menuItems = [
@@ -52,34 +56,66 @@ export const dashboardMenu = [
   },
   {
     id: 2,
-    label: "Connect Wallet",
-    href: "/dashboard/wallet",
-    icon: Wallet,
+    label: "Personal",
+    href: "/dashboard/personal",
+    icon: UserRoundPen,
     current: false,
     color: "#20283E"
   },
-  // {
-  //   id: 3,
-  //   label: "Category",
-  //   href: "/dashboard/categories",
-  //   icon: Box,
-  //   current: false,
-  //   color: "#25476A"
+  {
+    id: 3,
+    label: "Payments",
+    href: "/dashboard/payments",
+    icon: HandCoins,
+    current: false,
+    color: "#25476A"
 
-  // },
-  // {
-  //   id: 4,
-  //   label: "Orders",
-  //   href: "/dashboard/orders",
-  //   icon: Calendar,
-  //   current: false,
-  //   color: "#191C24"
-  // },
+  },
+  {
+    id: 4,
+    label: "History",
+    href: "/dashboard/history",
+    icon: FileStack,
+    current: false,
+    color: "#191C24"
+  },
   {
     id: 5,
-    label: "Users",
-    href: "/dashboard/users",
-    icon: Users,
+    label: "Banks",
+    href: "/dashboard/banks",
+    icon: Landmark,
+    current: false,
+    color: "#1E1E2C"
+  },
+  {
+    id: 6,
+    label: "Deposit",
+    href: "/dashboard/deposit",
+    icon: Warehouse,
+    current: false,
+    color: "#1E1E2C"
+  },
+  {
+    id: 7,
+    label: "Withdraw",
+    href: "/dashboard/withdraw",
+    icon: BanknoteArrowDown,
+    current: false,
+    color: "#1E1E2C"
+  },
+  {
+    id: 8,
+    label: "Send Funds",
+    href: "/dashboard/withdraw",
+    icon: SendFundsIcon,
+    current: false,
+    color: "#1E1E2C"
+  },
+  {
+    id: 9,
+    label: "Notifications",
+    href: "/dashboard/notifications",
+    icon: Bell,
     current: false,
     color: "#1E1E2C"
   },
