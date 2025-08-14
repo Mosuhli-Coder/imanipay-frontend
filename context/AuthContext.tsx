@@ -16,6 +16,8 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, newPassword: string, confirmPassword: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -40,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Verify token with your backend
-      const res = await fetch('/api/auth/verify', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verify`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -63,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -80,6 +82,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(data.user);
   };
 
+  const forgotPassword = async (email: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/password/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+    console.log("Data: ",data);
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to send reset email');
+    }
+  };
+
+  const resetPassword = async (token: string, newPassword: string, confirmPassword: string) => {
+    if (newPassword !== confirmPassword) {
+      throw new Error('Passwords do not match');
+    }
+
+    if (newPassword.length < 6) {
+      throw new Error('Password must be at least 6 characters');
+    }
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/password/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        token, 
+        newPassword,
+        confirmPassword 
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || data.message || 'Failed to reset password');
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('authToken');
     setUser(null);
@@ -93,6 +136,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         login,
+        forgotPassword,
+        resetPassword,
         logout,
       }}
     >
