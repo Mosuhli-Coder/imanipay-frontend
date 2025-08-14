@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -13,6 +13,24 @@ import PublicRoute from '@/components/auth/PublicRoute';
 import Link from 'next/link';
 
 export default function ResetPasswordPage() {
+    return (
+        <PublicRoute>
+            <Suspense fallback={
+                <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                    <Card className="w-full max-w-md shadow-lg">
+                        <CardHeader>
+                            <CardTitle className="text-2xl text-center">Loading...</CardTitle>
+                        </CardHeader>
+                    </Card>
+                </div>
+            }>
+                <ResetPasswordContent />
+            </Suspense>
+        </PublicRoute>
+    );
+}
+
+function ResetPasswordContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { resetPassword } = useAuth();
@@ -77,72 +95,68 @@ export default function ResetPasswordPage() {
 
     if (isValidating) {
         return (
-            <PublicRoute>
-                <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                    <Card className="w-full max-w-md shadow-lg">
-                        <CardHeader>
-                            <CardTitle className="text-2xl text-center">Validating...</CardTitle>
-                        </CardHeader>
-                    </Card>
-                </div>
-            </PublicRoute>
+            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                <Card className="w-full max-w-md shadow-lg">
+                    <CardHeader>
+                        <CardTitle className="text-2xl text-center">Validating...</CardTitle>
+                    </CardHeader>
+                </Card>
+            </div>
         );
     }
 
     return (
-        <PublicRoute>
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <Card className="w-full max-w-md shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="text-2xl text-center">Reset Password</CardTitle>
-                        <CardDescription className="text-center">
-                            Enter your new password below.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <Label htmlFor="password" className='mb-2'>New Password</Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                    disabled={isLoading}
-                                    placeholder="Enter new password"
-                                    minLength={6}
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="confirmPassword" className='mb-2'>Confirm New Password</Label>
-                                <Input
-                                    id="confirmPassword"
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    required
-                                    disabled={isLoading}
-                                    placeholder="Confirm new password"
-                                    minLength={6}
-                                />
-                            </div>
-
-                            <Button type="submit" className="w-full" disabled={isLoading}>
-                                {isLoading ? 'Resetting...' : 'Reset Password'}
-                            </Button>
-                        </form>
-
-                        <div className="mt-4 text-center">
-                            <Link href="/login" className="text-sm text-blue-600 hover:underline">
-                                Back to Login
-                            </Link>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <Card className="w-full max-w-md shadow-lg">
+                <CardHeader>
+                    <CardTitle className="text-2xl text-center">Reset Password</CardTitle>
+                    <CardDescription className="text-center">
+                        Enter your new password below.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <Label htmlFor="password" className='mb-2'>New Password</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                disabled={isLoading}
+                                placeholder="Enter new password"
+                                minLength={6}
+                            />
                         </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </PublicRoute>
+                        <div>
+                            <Label htmlFor="confirmPassword" className='mb-2'>Confirm New Password</Label>
+                            <Input
+                                id="confirmPassword"
+                                type="password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                required
+                                disabled={isLoading}
+                                placeholder="Confirm new password"
+                                minLength={6}
+                            />
+                        </div>
+
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                            {isLoading ? 'Resetting...' : 'Reset Password'}
+                        </Button>
+                    </form>
+
+                    <div className="mt-4 text-center">
+                        <Link href="/login" className="text-sm text-blue-600 hover:underline">
+                            Back to Login
+                        </Link>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
