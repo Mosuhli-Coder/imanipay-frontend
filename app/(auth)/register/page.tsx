@@ -30,7 +30,7 @@ export default function RegisterPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -135,6 +135,17 @@ export default function RegisterPage() {
                 Register
               </Button>
             </form>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                Already have an account?{' '}
+                <a 
+                  href="/login" 
+                  className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                >
+                  Login
+                </a>
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
