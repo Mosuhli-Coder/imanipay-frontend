@@ -1,40 +1,48 @@
-// app/dashboard/page.tsx
-"use server";
+"use client";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { redirect } from "next/navigation";
-// import StatsContainer from "@/components/dashboard/overview/StatsContainer"; // Import StatsContainer
-// import SalesOverviewChart from "@/components/dashboard/overview/SalesOverviewChart";
-// import CategoryDistributionChart from "@/components/dashboard/overview/CategoryDistributionChart";
-// import SalesChannelChart from "@/components/dashboard/overview/SalesChannelChart";
+import { useEffect } from "react";
 
-const DashboardPage = async () => {
-    try {
-        // const user = await getUserByRole("Admin");
+const DashboardPage = () => {
+    const { user, loading, isAuthenticated } = useCurrentUser();
 
-        // if (!user) {
-        //     redirect("/");
-        // }
+    useEffect(() => {
+        // Only redirect after loading is complete and user is not authenticated
+        if (!loading && !isAuthenticated) {
+            redirect("/login"); // or "/" depending on your preference
+        }
+    }, [loading, isAuthenticated]);
 
+    // Show loading state while checking authentication
+    if (loading) {
         return (
-            <main>
-                <div className='flex-1 overflow-auto relative z-10'>
-                    <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
-                        {/* Use the StatsContainer for the stats */}
-                        {/* <StatsContainer /> */}
-
-                        {/* CHARTS */}
-                        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-                            {/* <SalesOverviewChart />
-                            <CategoryDistributionChart />
-                            <SalesChannelChart /> */}
-                        </div>
-                    </main>
-                </div>
-            </main>
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-lg">Loading...</div>
+            </div>
         );
-    } catch (error) {
-        console.error("Error fetching user data:", error);
-        redirect("/");
     }
+
+    // If not authenticated, return null (redirect will handle navigation)
+    if (!isAuthenticated) {
+        return null;
+    }
+
+    return (
+        <main>
+            <div className='flex-1 overflow-auto relative z-10'>
+                <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
+                    <h1 className="text-2xl font-bold mb-6">
+                        Welcome, {user?.first_name || user?.fullName}!
+                    </h1>
+
+                    {/* CHARTS */}
+                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+                        {/* Your dashboard content here */}
+                    </div>
+                </main>
+            </div>
+        </main>
+    );
 };
 
 export default DashboardPage;

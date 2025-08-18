@@ -1,27 +1,39 @@
-import DashboardHeader from "@/components/dashboard/general/DashboardHeader";
-import DashboardSidebar from "@/components/dashboard/general/DashboardSidebar"
+"use client";
+
+import { useSidebar } from "@/context/SidebarContext";
+import AppHeader from "@/components/dashboard/general/AppHeader";
+import AppSidebar from "@/components/dashboard/general/Sidebar";
+import Backdrop from "@/components/dashboard/general/Backdrop";
 import React from "react";
 
-const layout = ({
+export default function AdminLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) => {
-  return (
-    <main className='flex h-screen bg-white text-emerald-800 overflow-hidden'>
-      <div className='fixed inset-0 z-0'>
-        <div className='absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 opacity-80' />
-        <div className='absolute inset-0 backdrop-blur-sm' />
-      </div>
-      <DashboardSidebar />
-      <div className="flex-1 overflow-y-auto bg-emerald-50 px-2 z-10">
-        <DashboardHeader />
-        <div className="bg-white mt-2 p-2 rounded mb-3 flex-1 overflow-y-auto">
-          {children}
-        </div>
-      </div>
-    </main>
-  );
-};
+}) {
+  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
-export default layout;
+  // Dynamic class for main content margin based on sidebar state
+  const mainContentMargin = isMobileOpen
+    ? "ml-0"
+    : isExpanded || isHovered
+      ? "lg:ml-[290px]"
+      : "lg:ml-[90px]";
+
+  return (
+    <div className="min-h-screen xl:flex">
+      {/* Sidebar and Backdrop */}
+      <AppSidebar />
+      <Backdrop />
+      {/* Main Content Area */}
+      <div
+        className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
+      >
+        {/* Header */}
+        <AppHeader />
+        {/* Page Content */}
+        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">{children}</div>
+      </div>
+    </div>
+  );
+}
