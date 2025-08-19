@@ -63,8 +63,8 @@ export default function ForgotPasswordPage() {
                                     Try Another Email
                                 </Button>
                                 <div>
-                                    <Link href="/login" className="text-sm text-blue-600 hover:underline">
-                                        Back to Login
+                                    <Link href="/verify-otp" className="text-sm text-blue-600 hover:underline">
+                                        Verify OTP
                                     </Link>
                                 </div>
                             </div>

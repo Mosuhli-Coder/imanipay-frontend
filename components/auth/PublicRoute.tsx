@@ -1,37 +1,49 @@
-'use client';
-
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+"use client";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface PublicRouteProps {
-  children: ReactNode;
-  fallback?: ReactNode;
+  children: React.ReactNode;
+  redirectTo?: string;
 }
 
-export default function PublicRoute({ children, fallback }: PublicRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+const PublicRoute = ({ children, redirectTo = '/dashboard' }: PublicRouteProps) => {
+  const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      router.push('/dashboard');
-    }
-  }, [isAuthenticated, isLoading, router]);
+    const redirectTimer = setTimeout(() => {
+
+      if (!isLoading && isAuthenticated && user) {
+        router.replace(redirectTo);
+      }
+    }, 100);
+
+    return () => clearTimeout(redirectTimer);
+  }, [isLoading, isAuthenticated, user, router, redirectTo]);
+
 
   if (isLoading) {
     return (
-      fallback || (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-      )
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="text-lg mb-4">Loading...</div>
+        <div className="text-sm text-gray-500">Checking authentication...</div>
+      </div>
     );
   }
 
-  if (isAuthenticated) {
-    return null; // Will redirect in useEffect
+
+  if (!isLoading && isAuthenticated && user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="text-lg mb-4">Redirecting...</div>
+        <div className="text-sm text-gray-500">You are already logged in.</div>
+      </div>
+    );
   }
 
   return <>{children}</>;
-}
+};
+
+export default PublicRoute;
