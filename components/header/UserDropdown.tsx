@@ -16,7 +16,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { Button } from "@/components/ui/button";
 
 export default function UserDropdown() {
-    const { user, loading, error } = useCurrentUser();
+    const { user, loading } = useCurrentUser();
 
     if (loading) {
         return (
@@ -27,10 +27,10 @@ export default function UserDropdown() {
         );
     }
 
-    if (error) {
+    if (!user) {
         return (
             <div className="p-2 text-red-500 text-sm">
-                Error loading user data
+                User not found
             </div>
         );
     }
