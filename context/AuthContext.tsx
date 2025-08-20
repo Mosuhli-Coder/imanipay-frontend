@@ -29,57 +29,95 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is logged in on app load
     checkAuthStatus();
   }, []);
+
+  // Helper function to decode JWT and extract user data
+  const decodeUserFromToken = (token: string): User | null => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+      // Check if token is expired
+      const currentTime = Date.now() / 1000;
+      if (payload.exp && payload.exp < currentTime) {
+        return null;
+      }
+
+      return {
+        id: payload.userId,
+        email: payload.email,
+        fullName: payload.fullName,
+        phoneNumber: payload.phoneNumber
+      };
+    } catch (error) {
+      console.error('❌ Failed to decode JWT:', error);
+      return null;
+    }
+  };
 
   const checkAuthStatus = async () => {
     try {
       const token = localStorage.getItem('authToken');
+
       if (!token) {
+        setUser(null);
         setIsLoading(false);
         return;
       }
 
-      // Verify token with your backend
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verify`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      // Decode token to get user data
+      const userData = decodeUserFromToken(token);
 
-      if (res.ok) {
-        const userData = await res.json();
-        setUser(userData.user);
+      if (userData) {
+        setUser(userData);
       } else {
-        // Token is invalid, remove it
         localStorage.removeItem('authToken');
+        setUser(null);
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
       localStorage.removeItem('authToken');
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
   const login = async (email: string, password: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
 
-    const data = await res.json();
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!res.ok) {
-      throw new Error(data.error || 'Login failed');
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || data.message || 'Login failed');
+      }
+
+      // Check if we have accessToken
+      if (!data.accessToken) {
+        throw new Error('No access token received');
+      }
+
+      localStorage.setItem('authToken', data.accessToken);
+
+      // Decode user data from the token
+      const userData = decodeUserFromToken(data.accessToken);
+
+      if (userData) {
+        setUser(userData);
+      } else {
+        throw new Error('Failed to decode user data from token');
+      }
+    } catch (error: any) {
+      // Clean up on error
+      localStorage.removeItem('authToken');
+      setUser(null);
+      throw error;
     }
-
-    // Store token and user data
-    localStorage.setItem('authToken', data.token);
-    setUser(data.user);
   };
 
   const forgotPassword = async (email: string) => {
@@ -90,7 +128,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     const data = await res.json();
-    console.log("Data: ",data);
 
     if (!res.ok) {
       throw new Error(data.error || 'Failed to send reset email');
@@ -109,10 +146,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/password/reset-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        token, 
+      body: JSON.stringify({
+        token,
         newPassword,
-        confirmPassword 
+        confirmPassword
       }),
     });
 
@@ -129,12 +166,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push('/login');
   };
 
+  // Debug current auth state
+  const isAuthenticated = !!user;
+
   return (
     <AuthContext.Provider
       value={{
         user,
         isLoading,
-        isAuthenticated: !!user,
+        isAuthenticated,
         login,
         forgotPassword,
         resetPassword,

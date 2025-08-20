@@ -1,5 +1,4 @@
 "use client";
-
 import { useAuth } from "@/context/AuthContext";
 
 // Extended user type for the component
@@ -26,11 +25,9 @@ export function useCurrentUser(): UseCurrentUserReturn {
     // Helper function to parse full name
     const parseFullName = (fullName: string | undefined) => {
         if (!fullName) return { first_name: "", last_name: "" };
-
         const nameParts = fullName.trim().split(" ");
         const first_name = nameParts[0] || "";
         const last_name = nameParts.slice(1).join(" ") || ""; // Handle multiple last names
-
         return { first_name, last_name };
     };
 
@@ -44,7 +41,7 @@ export function useCurrentUser(): UseCurrentUserReturn {
 
     return {
         user: extendedUser,
-        loading: isLoading,
+        loading: isLoading, // Make sure this matches the AuthContext property
         error: !isLoading && !user ? "Not authenticated" : null,
         isAuthenticated,
     };
