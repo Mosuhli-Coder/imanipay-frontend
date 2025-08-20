@@ -15,7 +15,6 @@ interface ExtendedUser {
 interface UseCurrentUserReturn {
     user: ExtendedUser | null;
     loading: boolean;
-    error: string | null;
     isAuthenticated: boolean;
 }
 
@@ -42,7 +41,6 @@ export function useCurrentUser(): UseCurrentUserReturn {
     return {
         user: extendedUser,
         loading: isLoading, // Make sure this matches the AuthContext property
-        error: !isLoading && !user ? "Not authenticated" : null,
         isAuthenticated,
     };
 }

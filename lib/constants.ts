@@ -135,6 +135,7 @@ export const DASHBOARD_MENU_ITEMS: NavItem[] = [
     icon: Settings,
     color: "#6B7280",
     subItems: [
+      { name: "Account Settings", path: "/settings", new: true },
       { name: "App Settings", path: "/dashboard/settings/app" },
       { name: "Privacy", path: "/dashboard/settings/privacy" },
       { name: "Billing", path: "/dashboard/settings/billing", pro: true },
