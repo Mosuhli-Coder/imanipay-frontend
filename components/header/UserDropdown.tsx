@@ -13,10 +13,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, User, Settings, Info, LogOut } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 
 export default function UserDropdown() {
     const { user, loading } = useCurrentUser();
+    const { logout } = useAuth();
 
     if (loading) {
         return (
@@ -105,11 +107,14 @@ export default function UserDropdown() {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem asChild className="text-red-600 dark:text-red-400">
-                    <Link href="/api/auth/signout" className="flex items-center gap-2">
+                <DropdownMenuItem 
+                    onClick={logout}
+                    className="text-red-600 dark:text-red-400 cursor-pointer"
+                >
+                    <div className="flex items-center gap-2">
                         <LogOut className="h-4 w-4" />
                         Sign out
-                    </Link>
+                    </div>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
