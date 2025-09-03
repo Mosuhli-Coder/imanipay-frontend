@@ -1,0 +1,260 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { API_ENDPOINTS } from "@/lib/api-config";
+import { toast } from "sonner";
+
+interface Asset {
+  id: string;
+  walletId: string;
+  asset: string;
+  amount: number;
+  updatedAt: string;
+}
+
+const Page = () => {
+  const { loading, isAuthenticated } = useCurrentUser();
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    receiverWalletAddress: "",
+    amount: "",
+    asset: "",
+    description: "",
+  });
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [senderWalletId, setSenderWalletId] = useState("");
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [loading, isAuthenticated, router]);
+
+  useEffect(() => {
+    const fetchAssets = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          toast.error("Authentication required");
+          return;
+        }
+
+        // Get walletId from dashboard data stored in localStorage or context
+        const dashboardDataString = localStorage.getItem("dashboardData");
+        let walletId = "";
+        if (dashboardDataString) {
+          try {
+            const dashboardData = JSON.parse(dashboardDataString);
+            if (dashboardData.wallets && dashboardData.wallets.length > 0) {
+              walletId = dashboardData.wallets[0].id;
+
+              console.log("Using wallets from localStorage:", dashboardData.wallet);
+              console.log("Using walletId from localStorage:", walletId);
+            }
+          } catch (e) {
+            console.error("Failed to parse dashboardData from localStorage", e);
+          }
+        }
+
+        if (!walletId) {
+          toast.error("Wallet ID not found. Please visit dashboard first.");
+          return;
+        }
+
+        const response = await fetch(
+          API_ENDPOINTS.blockchainWallets.getAssets(walletId),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          toast.error(`Failed to fetch assets: ${response.status} ${response.statusText}`);
+          return;
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          toast.error("Server returned invalid response format");
+          return;
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          console.log(data);
+          setSenderWalletId(walletId || "");
+          setAssets(data.data.balances || []);
+          if (data.data.balances && data.data.balances.length > 0) {
+            setFormData((prev) => ({
+              ...prev,
+              asset: data.data.balances[0].asset,
+            }));
+          }
+        } else {
+          toast.error(data.message || "Failed to fetch assets");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching assets");
+        console.error(error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchAssets();
+    }
+  }, [isAuthenticated]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoadingSubmit(true);
+
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication required");
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.blockchainWallets.sendStablecoin, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          senderWalletId,
+          receiverWalletAddress: formData.receiverWalletAddress,
+          amount: parseFloat(formData.amount),
+          asset: formData.asset,
+          description: formData.description,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Money sent successfully!");
+        // Reset form
+        setFormData({
+          receiverWalletAddress: "",
+          amount: "",
+          asset: assets.length > 0 ? assets[0].asset : "",
+          description: "",
+        });
+      } else {
+        toast.error(data.message || "Failed to send money");
+      }
+    } catch (error) {
+      toast.error("An error occurred while sending money");
+      console.error(error);
+    } finally {
+      setLoadingSubmit(false);
+    }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Send Money</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Sender Wallet ID is hidden and passed in code */}
+            <input type="hidden" name="senderWalletId" value={senderWalletId} />
+
+            <div>
+              <Label htmlFor="receiverWalletAddress">Receiver Wallet Address</Label>
+              <Input
+                id="receiverWalletAddress"
+                name="receiverWalletAddress"
+                type="text"
+                value={formData.receiverWalletAddress}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter receiver wallet address"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="amount">Amount</Label>
+              <Input
+                id="amount"
+                name="amount"
+                type="number"
+                step="0.01"
+                value={formData.amount}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter amount"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="asset">Asset</Label>
+              <select
+                id="asset"
+                name="asset"
+                value={formData.asset}
+                onChange={handleInputChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {assets.length === 0 && <option value="">No assets available</option>}
+                {assets.map((asset) => (
+                  <option key={asset.id} value={asset.asset}>
+                    {asset.asset} (Balance: {asset.amount})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                name="description"
+                type="text"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Enter description (optional)"
+              />
+            </div>
+
+            <Button type="submit" disabled={loadingSubmit} className="w-full">
+              {loadingSubmit ? "Sending..." : "Send Money"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Page;
