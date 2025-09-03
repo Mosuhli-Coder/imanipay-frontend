@@ -55,7 +55,7 @@ const DashboardPage = () => {
     try {
       await navigator.clipboard.writeText(address);
       toast.success("Address copied to clipboard");
-    } catch (error) {
+    } catch {
       toast.error("Failed to copy address");
     }
   };
