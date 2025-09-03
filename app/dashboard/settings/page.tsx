@@ -176,7 +176,7 @@ export default function AccountSettingsPage() {
             </div>
             <Button 
               variant="outline" 
-              onClick={() => router.push("/settings/profile")}
+              onClick={() => router.push("/dashboard/settings/profile")}
               className="mt-2"
             >
               Edit Profile Details
