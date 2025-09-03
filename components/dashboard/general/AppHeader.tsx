@@ -4,7 +4,7 @@ import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
 import NotificationDropdown from "@/components/header/NotificationDropdown";
 import UserDropdown from "@/components/header/UserDropdown";
 import { useSidebar } from "@/context/SidebarContext";
-import Link from "next/link";
+// import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import {
     X,
@@ -55,9 +55,9 @@ const AppHeader: React.FC = () => {
                         {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
 
-                    <Link href="/" className="lg:hidden">
+                    {/* <Link href="/" className="lg:hidden">
                         <h1 className="font-bold text-2xl">Rorisang Moerane</h1>
-                    </Link>
+                    </Link> */}
 
                     <button
                         onClick={toggleApplicationMenu}
