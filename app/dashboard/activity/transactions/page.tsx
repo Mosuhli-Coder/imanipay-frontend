@@ -4,23 +4,33 @@ import { useState, useEffect } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { API_ENDPOINTS } from "@/lib/api-config";
+import { toast } from "sonner";
 
 interface Transaction {
   id: string;
-  type: string;
+  senderWalletId: string | null;
+  receiverWalletId: string | null;
   amount: number;
   asset: string;
+  type: string;
   status: string;
   description: string;
   createdAt: string;
-  from: string;
-  to: string;
-  isSent: boolean;
+  senderWallet?: {
+    walletAddress: string;
+  };
+  receiverWallet?: {
+    walletAddress: string;
+  };
 }
 
 const TransactionsPage = () => {
   const { loading, isAuthenticated } = useCurrentUser();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -29,20 +39,55 @@ const TransactionsPage = () => {
   }, [loading, isAuthenticated]);
 
   useEffect(() => {
-    const dashboardDataString = localStorage.getItem("dashboardData");
-    if (dashboardDataString) {
+    const fetchTransactions = async () => {
+      const dashboardDataString = localStorage.getItem("dashboardData");
+      if (!dashboardDataString) {
+        toast.error("Dashboard data not found. Please visit dashboard first.");
+        return;
+      }
       try {
         const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.recentTransactions) {
-          setTransactions(dashboardData.recentTransactions);
+        if (!dashboardData.wallets || dashboardData.wallets.length === 0) {
+          toast.error("No wallets found in dashboard data.");
+          return;
         }
-      } catch (e) {
-        console.error("Failed to parse dashboardData from localStorage", e);
+        const walletId = dashboardData.wallets[0].id;
+        setLoadingData(true);
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          toast.error("Authentication required");
+          return;
+        }
+        const response = await fetch(API_ENDPOINTS.blockchainWallets.getTransactions(walletId, page, 5), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          toast.error(`Failed to fetch transactions: ${response.status}`);
+          return;
+        }
+        const data = await response.json();
+        if (data.success) {
+          setTransactions(data.data.transactions);
+          setTotalPages(data.data.pagination.pages);
+        } else {
+          toast.error(data.message || "Failed to fetch transactions");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching transactions");
+        console.error(error);
+      } finally {
+        setLoadingData(false);
       }
-    }
-  }, []);
+    };
 
-  if (loading) {
+    if (isAuthenticated) {
+      fetchTransactions();
+    }
+  }, [isAuthenticated, page]);
+
+  if (loading || loadingData) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-lg">Loading...</div>
@@ -53,6 +98,14 @@ const TransactionsPage = () => {
   if (!isAuthenticated) {
     return null;
   }
+
+  const handlePrevPage = () => {
+    setPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   return (
     <main className="flex-1 overflow-auto relative z-10">
@@ -74,15 +127,15 @@ const TransactionsPage = () => {
                       <div>
                         <p className="font-semibold">{transaction.description}</p>
                         <p className="text-sm text-gray-600">
-                          {transaction.isSent ? "Sent to" : "Received from"}: {transaction.isSent ? transaction.to : transaction.from}
+                          {transaction.type === "DEBIT" ? "Sent to" : "Received from"}: {transaction.type === "DEBIT" ? transaction.receiverWallet?.walletAddress || "" : transaction.senderWallet?.walletAddress || ""}
                         </p>
                         <p className="text-sm text-gray-500">
                           {new Date(transaction.createdAt).toLocaleString()}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className={`font-mono ${transaction.isSent ? "text-red-600" : "text-green-600"}`}>
-                          {transaction.isSent ? "-" : "+"}{transaction.amount} {transaction.asset}
+                        <p className={`font-mono ${transaction.type === "DEBIT" ? "text-red-600" : "text-green-600"}`}>
+                          {transaction.type === "DEBIT" ? "-" : "+"}{transaction.amount} {transaction.asset}
                         </p>
                         <span className={`px-2 py-1 rounded text-sm ${transaction.status === "SUCCESS" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
                           {transaction.status}
@@ -92,6 +145,25 @@ const TransactionsPage = () => {
                   </div>
                 ))
               )}
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={handlePrevPage}
+                disabled={page === 1}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="self-center">
+                Page {page} of {totalPages}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={page === totalPages}
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
             </div>
           </CardContent>
         </Card>
