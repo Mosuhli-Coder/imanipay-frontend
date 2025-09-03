@@ -9,4 +9,9 @@ export const API_ENDPOINTS = {
     verify: `${API_BASE_URL}/auth/verify`,
     verifyOtp: `${API_BASE_URL}/auth/verify-otp`,
   },
+  blockchainWallets: {
+    sendStablecoin: `${API_BASE_URL}/blockchain-wallets/send-stablecoin`,
+    getAssets: (walletId: string) => `${API_BASE_URL}/blockchain-wallets/${walletId}/assets`,
+  },
+  userDashboard: `${API_BASE_URL}/user/dashboard`,
 };

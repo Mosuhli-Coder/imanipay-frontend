@@ -22,12 +22,12 @@ export default function ProfileHeader() {
 
       <div className="border-b border-gray-200 dark:border-gray-700">
         <nav className="flex space-x-8">
-          <Link href="/settings/profile">
+          <Link href="/dashboard/settings/profile">
             <button className="py-2 px-1 border-b-2 border-blue-500 text-blue-600 dark:text-blue-400 font-medium">
               Personal Information
             </button>
           </Link>
-          <Link href="/settings">
+          <Link href="/dashboard/settings">
             <button className="py-2 px-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
               Account Settings
             </button>
