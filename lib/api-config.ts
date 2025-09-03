@@ -12,6 +12,10 @@ export const API_ENDPOINTS = {
   blockchainWallets: {
     sendStablecoin: `${API_BASE_URL}/blockchain-wallets/send-stablecoin`,
     getAssets: (walletId: string) => `${API_BASE_URL}/blockchain-wallets/${walletId}/assets`,
+    getTransactions: (walletId: string, page?: number, limit?: number) => `${API_BASE_URL}/blockchain-wallets/${walletId}/transactions?page=${page || 1}&limit=${limit || 10}`,
   },
   userDashboard: `${API_BASE_URL}/user/dashboard`,
+  wallets: {
+    balance: `${API_BASE_URL}/wallets/balance`,
+  },
 };
