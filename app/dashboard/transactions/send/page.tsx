@@ -30,6 +30,7 @@ const Page = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [senderWalletId, setSenderWalletId] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -130,8 +131,13 @@ const Page = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setShowConfirm(true);
+  };
+
+  const handleConfirmSend = async () => {
+    setShowConfirm(false);
     setLoadingSubmit(true);
 
     try {
@@ -178,8 +184,12 @@ const Page = () => {
     }
   };
 
+  const handleCancelSend = () => {
+    setShowConfirm(false);
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6 relative">
       <Card>
         <CardHeader>
           <CardTitle>Send Money</CardTitle>
@@ -253,6 +263,20 @@ const Page = () => {
           </form>
         </CardContent>
       </Card>
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-semibold mb-4">Confirm Transaction</h2>
+            <p className="mb-2">Receiver Wallet Address: {formData.receiverWalletAddress}</p>
+            <p className="mb-2">Amount: {formData.amount} {formData.asset}</p>
+            {formData.description && <p className="mb-4">Description: {formData.description}</p>}
+            <div className="flex justify-end gap-4">
+              <Button variant="outline" onClick={handleCancelSend}>Cancel</Button>
+              <Button onClick={handleConfirmSend} disabled={loadingSubmit}>Confirm</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -167,6 +167,21 @@ const DashboardPage = () => {
           ))}
         </div>
 
+        {/* Funds Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Funds</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              View and manage your overall balance across all assets
+            </p>
+            <Link href="/dashboard/funds/balance" className="text-blue-600 hover:text-blue-800 font-medium">
+              Balance Overview
+            </Link>
+          </CardContent>
+        </Card>
+
         {/* Recent Transactions */}
         <Card>
           <CardHeader>
