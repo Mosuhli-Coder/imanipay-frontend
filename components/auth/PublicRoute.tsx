@@ -26,7 +26,7 @@ const PublicRoute = ({ children, redirectTo = '/dashboard' }: PublicRouteProps) 
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div suppressHydrationWarning className="flex flex-col items-center justify-center min-h-screen">
         <div className="text-lg mb-4">Loading...</div>
         <div className="text-sm text-gray-500">Checking authentication...</div>
       </div>
@@ -36,14 +36,14 @@ const PublicRoute = ({ children, redirectTo = '/dashboard' }: PublicRouteProps) 
 
   if (!isLoading && isAuthenticated && user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div suppressHydrationWarning className="flex flex-col items-center justify-center min-h-screen">
         <div className="text-lg mb-4">Redirecting...</div>
         <div className="text-sm text-gray-500">You are already logged in.</div>
       </div>
     );
   }
 
-  return <>{children}</>;
+  return <div suppressHydrationWarning>{children}</div>;
 };
 
 export default PublicRoute;

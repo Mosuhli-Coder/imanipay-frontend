@@ -78,7 +78,9 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
                 toggleSubmenu,
             }}
         >
-            {children}
+            <div suppressHydrationWarning>
+                {children}
+            </div>
         </SidebarContext.Provider>
     );
 };

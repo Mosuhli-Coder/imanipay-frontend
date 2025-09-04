@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('authToken');
         setUser(null);
       }
-    } catch (error) {
+    } catch {
       localStorage.removeItem('authToken');
       setUser(null);
     } finally {
@@ -163,7 +163,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     localStorage.removeItem('authToken');
     setUser(null);
-    router.push('/login');
+    router.push('/');
   };
 
   // Debug current auth state
@@ -181,7 +181,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
       }}
     >
-      {children}
+      <div suppressHydrationWarning>
+        {children}
+      </div>
     </AuthContext.Provider>
   );
 }

@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import PublicRoute from '@/components/auth/PublicRoute';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -62,6 +64,11 @@ export default function RegisterPage() {
   return (
     <PublicRoute>
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="mb-8 text-center">
+          <Link href="/" className="inline-block">
+            <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
+          </Link>
+        </div>
         <Card className="w-full max-w-md shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl text-center">Create Account</CardTitle>
