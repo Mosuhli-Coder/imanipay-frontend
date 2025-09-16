@@ -55,8 +55,8 @@ const Header = () => {
 
                 <div className="hidden lg:block">
                     <div className="flex gap-4">
-                        <Link href="/register" className="btn border-[#01403A] border text-[#01403A] py-2 px-4 rounded-md">Register</Link>
                         <Link href="/login" className="btn bg-[#01403A] text-white py-2 px-4 rounded-md">Login</Link>
+                        <Link href="/register" className="btn border-[#01403A] border text-[#01403A] py-2 px-4 rounded-md">Get Started</Link>
                     </div>
                 </div>
             </div>
