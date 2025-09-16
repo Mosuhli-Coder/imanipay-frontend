@@ -18,4 +18,8 @@ export const API_ENDPOINTS = {
   wallets: {
     balance: `${API_BASE_URL}/wallets/balance`,
   },
+  mobileMoney: {
+    deposit: `${API_BASE_URL}/mobile-money/deposit`,
+    providers: `${API_BASE_URL}/mobile-money/providers`,
+  },
 };

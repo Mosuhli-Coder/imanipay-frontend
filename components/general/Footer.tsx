@@ -77,7 +77,7 @@ export default function Footer() {
                             </li>
                             <li className="flex items-start">
                                 <Mail className="mr-2 mt-1 text-primary-light" size={16} />
-                                <span>info@imanipayafrica.com</span>
+                                <span>teboho.mosuhli97@gmail.com</span>
                             </li>
                         </ul>
                     </div>
