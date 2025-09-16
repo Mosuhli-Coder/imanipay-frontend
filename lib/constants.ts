@@ -105,7 +105,7 @@ export const DASHBOARD_MENU_ITEMS: NavItem[] = [
     icon: TrendingUp,
     color: "#059669",
     subItems: [
-      { name: "Deposit", path: "/dashboard/funds/deposit" },
+      // { name: "Deposit", path: "/dashboard/funds/deposit" },
       { name: "Withdraw", path: "/dashboard/funds/withdraw" },
       { name: "Balance Overview", path: "/dashboard/funds/balance" },
       // { name: "Investment Options", path: "/dashboard/funds/investments", pro: true },
