@@ -21,5 +21,6 @@ export const API_ENDPOINTS = {
   mobileMoney: {
     deposit: `${API_BASE_URL}/mobile-money/deposit`,
     providers: `${API_BASE_URL}/mobile-money/providers`,
+    withdraw: `${API_BASE_URL}/mobile-money/withdraw`,
   },
 };
