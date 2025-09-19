@@ -97,7 +97,7 @@ export default function RegisterPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error || "Something went wrong");
+        toast.error(data.message || "Something went wrong");
         return;
       }
 
