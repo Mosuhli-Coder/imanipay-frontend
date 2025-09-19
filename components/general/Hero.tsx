@@ -43,7 +43,7 @@ export default function Hero() {
                                         </svg>
                                     ))}
                                 </div>
-                                <p className="text-sm text-gray-600">Trusted by 10,000+ businesses worldwide</p>
+                                <p className="text-sm text-gray-600 italic">Note: This is an MVP/prototype. The journey is ongoing and we appreciate your support.</p>
                             </div>
                         </div>
                     </div>

@@ -45,7 +45,7 @@ export default function WaitingList() {
         <div className="flex items-center justify-center bg-teal-800 text-white h-60">
             <div className="w-full">
                 <div>
-                    <h1 className="text-2xl text-center py-4">Sign Up For Our Waiting List</h1>
+                    <h1 className="text-2xl text-center py-4">Join Our Early Access List</h1>
                 </div>
                 <div className='px-20'>
                     <form onSubmit={handleSubmit} className="space-y-4 flex flex-row gap-4 align-center justify-center">
