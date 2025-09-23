@@ -30,7 +30,10 @@ export default function RootLayout({
           </SidebarProvider>
         </AuthProvider>
         <Analytics />
-        <Toaster />
+        <Toaster
+          position="top-center"
+          richColors
+        />
       </body>
     </html>
   );
