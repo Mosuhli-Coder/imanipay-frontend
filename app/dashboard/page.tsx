@@ -142,8 +142,8 @@ const DashboardPage = () => {
           {dashboardData?.wallets.map((wallet) => (
             <Card key={wallet.id}>
               <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>Wallet: {wallet.walletAddress}</CardTitle>
+                <div className="flex justify-between items-center gap-2 flex-wrap">
+                  <CardTitle className="max-w-full">Wallet: {wallet.walletAddress.length > 20 ? `${wallet.walletAddress.slice(0, 10)}...${wallet.walletAddress.slice(-10)}` : wallet.walletAddress}</CardTitle>
                   <div className="flex items-center gap-2">
                     <Button size="sm" variant="outline" onClick={() => copyAddress(wallet.walletAddress)}>Copy</Button>
                     <span className={`px-2 py-1 rounded text-sm ${wallet.status === "ACTIVE" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
