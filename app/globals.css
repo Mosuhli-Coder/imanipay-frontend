@@ -120,3 +120,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Toast styles */
+.sonner-toast-success {
+  background-color: green !important;
+  color: white !important;
+}
+
+.sonner-toast-error {
+  background-color: red !important;
+  color: white !important;
+}

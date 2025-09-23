@@ -32,7 +32,6 @@ export default function WaitingList() {
                 toast.error(data.message || 'Something went wrong');
                 return;
             }
-
             toast.success('Subscription Successful!');
             setFormData({ email: '' });
         } catch (err: any) {
