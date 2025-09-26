@@ -58,6 +58,13 @@ export default function Hero() {
                                     className="w-full h-auto rounded-xl"
                                     width={1000}
                                     height={1000}
+                                    priority
+                                    sizes="100vw"
+                                    style={{
+                                      aspectRatio: '1000/1000',
+                                      width: '100%',
+                                      height: 'auto'
+                                    }}
                                 />
                             </div>
                         </div>
