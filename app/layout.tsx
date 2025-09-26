@@ -20,6 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preload"
+          href="/images/hero-img.jpg"
+          as="image"
+        />
+      </head>
       <body
         className={`antialiased`}
       >
