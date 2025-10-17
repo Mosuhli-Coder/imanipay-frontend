@@ -38,6 +38,7 @@ interface Transaction {
   from: string;
   to: string;
   isSent: boolean;
+  txLink: string;
 }
 
 interface DashboardData {
@@ -200,6 +201,14 @@ const DashboardPage = () => {
                       <p className="text-sm text-gray-500">
                         {new Date(transaction.createdAt).toLocaleString()}
                       </p>
+                      <a
+                        href={transaction.txLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 text-sm underline"
+                      >
+                        View on Explorer
+                      </a>
                     </div>
                     <div className="text-right">
                       <p className={`font-mono ${transaction.isSent ? "text-red-600" : "text-green-600"}`}>
