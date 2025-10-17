@@ -27,11 +27,9 @@ interface Provider {
 interface WithdrawResponse {
   success: boolean;
   data: {
-    transactionId: string;
-    status: string;
-    amount: number;
-    provider: string;
-    phoneNumber: string;
+    success: boolean;
+    message: string;
+    payoutStatus: string;
   };
 }
 
@@ -39,10 +37,11 @@ const CURRENCIES = [
   { value: "ALGO", label: "ALGO" },
   { value: "USDC", label: "USDC" },
   { value: "USDT", label: "USDT" },
+  { value: "LSL", label: "LSL" },
 ];
 
 const WithdrawPage = () => {
-  const { loading, isAuthenticated } = useCurrentUser();
+  const { loading, isAuthenticated, user } = useCurrentUser();
   const [providers, setProviders] = useState<Provider[]>([]);
   const [formData, setFormData] = useState({
     amount: "",
@@ -83,20 +82,7 @@ const WithdrawPage = () => {
     }
   }, [isAuthenticated]);
 
-  const getWalletId = () => {
-    try {
-      const dashboardData = localStorage.getItem("dashboardData");
-      if (dashboardData) {
-        const parsed = JSON.parse(dashboardData);
-        if (parsed.wallets && parsed.wallets.length > 0) {
-          return parsed.wallets[0].id;
-        }
-      }
-    } catch (err) {
-      console.error("Failed to get wallet ID:", err);
-    }
-    return "cmeau25pr0001iiyopqsyom6e"; // fallback
-  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +99,7 @@ const WithdrawPage = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          walletId: getWalletId(),
+          userId: user?.id,
           amount: parseFloat(formData.amount),
           provider: formData.provider,
           phoneNumber: formData.phoneNumber,
@@ -252,15 +238,9 @@ const WithdrawPage = () => {
                   <AlertDescription>
                     <strong>Withdrawal Successful!</strong>
                     <br />
-                    Transaction ID: {success.data.transactionId}
+                    Message: {success.data.message}
                     <br />
-                    Status: {success.data.status}
-                    <br />
-                    Amount: {success.data.amount} {formData.currency}
-                    <br />
-                    Provider: {success.data.provider}
-                    <br />
-                    Phone: {success.data.phoneNumber}
+                    Payout Status: {success.data.payoutStatus}
                   </AlertDescription>
                 </Alert>
               )}

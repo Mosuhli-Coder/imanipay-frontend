@@ -27,11 +27,9 @@ interface Provider {
 interface DepositResponse {
   success: boolean;
   data: {
-    transactionId: string;
-    status: string;
-    amount: number;
-    provider: string;
-    phoneNumber: string;
+    success: boolean;
+    txId: string;
+    message: string;
   };
 }
 
@@ -39,6 +37,7 @@ const CURRENCIES = [
   { value: "ALGO", label: "ALGO" },
   { value: "USDC", label: "USDC" },
   { value: "USDT", label: "USDT" },
+  { value: "LSL", label: "LSL" },
 ];
 
 const DepositsPage = () => {
@@ -83,19 +82,21 @@ const DepositsPage = () => {
     }
   }, [isAuthenticated]);
 
-  const getWalletId = () => {
+  const getWalletAddress = () => {
     try {
       const dashboardData = localStorage.getItem("dashboardData");
+      console.log("Retrieved dashboard data:", dashboardData);
       if (dashboardData) {
         const parsed = JSON.parse(dashboardData);
+        console.log("Parsed dashboard data:", parsed);
         if (parsed.wallets && parsed.wallets.length > 0) {
-          return parsed.wallets[0].id;
+          return parsed.wallets[0].walletAddress;
         }
       }
     } catch (err) {
-      console.error("Failed to get wallet ID:", err);
+      console.error("Failed to get wallet address:", err);
     }
-    return "cmeau25pr0001iiyopqsyom6e"; // fallback
+    return "ANG5A64ZW7GCIWGYYX3RHBYE6G26Z6CSHREPMR3KC5VJA2OX7AVYK4TWSU"; // fallback
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +104,20 @@ const DepositsPage = () => {
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
+
+    // Validate required fields
+    if (!formData.amount || !formData.provider || !formData.phoneNumber || !formData.currency) {
+      setError("Please fill all required fields.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const walletId = getWalletAddress();
+    if (!walletId) {
+      setError("Wallet address not found. Please log in again.");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const token = localStorage.getItem("authToken");
@@ -113,7 +128,7 @@ const DepositsPage = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          walletId: getWalletId(),
+          walletId,
           amount: parseFloat(formData.amount),
           provider: formData.provider,
           phoneNumber: formData.phoneNumber,
@@ -252,15 +267,9 @@ const DepositsPage = () => {
                   <AlertDescription>
                     <strong>Deposit Successful!</strong>
                     <br />
-                    Transaction ID: {success.data.transactionId}
+                    Transaction ID: {success.data.txId}
                     <br />
-                    Status: {success.data.status}
-                    <br />
-                    Amount: {success.data.amount} {formData.currency}
-                    <br />
-                    Provider: {success.data.provider}
-                    <br />
-                    Phone: {success.data.phoneNumber}
+                    Message: {success.data.message}
                   </AlertDescription>
                 </Alert>
               )}
