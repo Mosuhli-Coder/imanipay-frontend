@@ -26,14 +26,20 @@ const KYCModal: React.FC<KYCModalProps> = ({
 
   // Check KYC status periodically when modal is open
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      // If modal is closed, stop polling immediately.
+      return;
+    }
 
     const checkKYCStatus = async () => {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) return;
 
-        const res = await fetch(API_ENDPOINTS.user.profile, { // Adjust endpoint as needed
+        const res = await fetch(API_ENDPOINTS.user.profile, { 
+          // CRITICAL FIX: Add 'no-cache' to force the browser to hit the server
+          // and prevent stale data from being returned locally.
+          cache: 'no-cache', 
           headers: { 
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json" 
@@ -44,8 +50,12 @@ const KYCModal: React.FC<KYCModalProps> = ({
           const data = await res.json();
           // Check if user is verified
           if (data.kycVerified || data.kycStatus === 'VERIFIED') {
-            toast.success("Verification completed successfully!");
+            
+            // 1. Call the parent's refresh function first.
             onVerificationComplete?.();
+            
+            // 2. Then notify and close this modal.
+            toast.success("Verification completed successfully!");
             onClose();
           }
         }
@@ -60,12 +70,28 @@ const KYCModal: React.FC<KYCModalProps> = ({
     // Then check every 5 seconds
     const interval = setInterval(checkKYCStatus, 5000);
 
+    // Cleanup: Clears the interval when the modal closes or dependencies change.
     return () => clearInterval(interval);
+    
+    // Note: Ensure onClose and onVerificationComplete are wrapped in useCallback
+    // in the parent component to prevent unnecessary re-runs of this effect.
   }, [isOpen, onClose, onVerificationComplete]);
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(walletAddress);
+      // Using document.execCommand('copy') as a robust fallback for clipboard
+      if (!navigator.clipboard) {
+        // Fallback for older browsers or restricted environments
+        const tempElement = document.createElement('textarea');
+        tempElement.value = walletAddress;
+        document.body.appendChild(tempElement);
+        tempElement.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempElement);
+      } else {
+        await navigator.clipboard.writeText(walletAddress);
+      }
+
       setIsCopied(true);
       toast.success("Wallet address copied!");
       setTimeout(() => setIsCopied(false), 2000);
