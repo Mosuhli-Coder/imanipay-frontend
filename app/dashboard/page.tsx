@@ -9,6 +9,7 @@ import Link from "next/link";
 
 import { API_ENDPOINTS } from "@/lib/api-config";
 import { toast } from "sonner";
+import KYCModal from "@/components/dashboard/KYCModal";
 
 interface User {
   kycStatus: string;
@@ -51,6 +52,7 @@ const DashboardPage = () => {
   const { user, loading, isAuthenticated } = useCurrentUser();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loadingData, setLoadingData] = useState(false);
+  const [showKYCModal, setShowKYCModal] = useState(false);
 
   const copyAddress = async (address: string) => {
     try {
@@ -94,6 +96,11 @@ const DashboardPage = () => {
         setDashboardData(data);
         // Store dashboard data in localStorage for use in other pages
         localStorage.setItem("dashboardData", JSON.stringify(data));
+
+        // Auto-show KYC modal if user is not verified
+        if (data.user && !data.user.kycVerified) {
+          setShowKYCModal(true);
+        }
       } catch (error) {
         toast.error("An error occurred while fetching dashboard data");
         console.error(error);
@@ -131,9 +138,16 @@ const DashboardPage = () => {
               <CardTitle>KYC Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <span className={`px-2 py-1 rounded text-sm ${dashboardData.user.kycVerified ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
-                {dashboardData.user.kycStatus}
-              </span>
+              <div className="flex items-center justify-between">
+                <span className={`px-2 py-1 rounded text-sm ${dashboardData.user.kycVerified ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
+                  {dashboardData.user.kycStatus}
+                </span>
+                {!dashboardData.user.kycVerified && (
+                  <Button onClick={() => setShowKYCModal(true)} size="sm">
+                    Verify KYC
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
         )}
@@ -232,6 +246,11 @@ const DashboardPage = () => {
           </CardContent>
         </Card>
       </main>
+      <KYCModal
+        isOpen={showKYCModal}
+        onClose={() => setShowKYCModal(false)}
+        walletAddress={dashboardData?.wallets[0]?.walletAddress || ""}
+      />
     </main>
   );
 };
