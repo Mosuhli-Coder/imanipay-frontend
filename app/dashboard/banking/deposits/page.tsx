@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { API_ENDPOINTS } from "@/lib/api-config";
+import KYCModal from "@/components/dashboard/KYCModal";
 
 interface Provider {
   id: string;
@@ -52,6 +53,7 @@ const DepositsPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<DepositResponse | null>(null);
+  const [showKYCModal, setShowKYCModal] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -82,6 +84,21 @@ const DepositsPage = () => {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    // Check KYC status on page load
+    const dashboardDataString = localStorage.getItem("dashboardData");
+    if (dashboardDataString) {
+      try {
+        const dashboardData = JSON.parse(dashboardDataString);
+        if (dashboardData.user && !dashboardData.user.kycVerified) {
+          setShowKYCModal(true);
+        }
+      } catch (e) {
+        console.error("Failed to parse dashboardData for KYC check", e);
+      }
+    }
+  }, []);
+
   const getWalletAddress = () => {
     try {
       const dashboardData = localStorage.getItem("dashboardData");
@@ -101,6 +118,22 @@ const DepositsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check KYC status before proceeding
+    const dashboardDataString = localStorage.getItem("dashboardData");
+    if (dashboardDataString) {
+      try {
+        const dashboardData = JSON.parse(dashboardDataString);
+        if (dashboardData.user && !dashboardData.user.kycVerified) {
+          setError("KYC verification is required to deposit funds. Please verify your identity first.");
+          setIsSubmitting(false);
+          return;
+        }
+      } catch (e) {
+        console.error("Failed to parse dashboardData for KYC check", e);
+      }
+    }
+
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
@@ -283,6 +316,24 @@ const DepositsPage = () => {
           </Card>
         </div>
       </main>
+      <KYCModal
+        isOpen={showKYCModal}
+        onClose={() => setShowKYCModal(false)}
+        walletAddress={
+          (() => {
+            try {
+              const dashboardDataString = localStorage.getItem("dashboardData");
+              if (dashboardDataString) {
+                const dashboardData = JSON.parse(dashboardDataString);
+                return dashboardData.wallets?.[0]?.walletAddress || "";
+              }
+            } catch (e) {
+              console.error("Failed to parse dashboardData for walletAddress", e);
+            }
+            return "";
+          })()
+        }
+      />
     </main>
   );
 };

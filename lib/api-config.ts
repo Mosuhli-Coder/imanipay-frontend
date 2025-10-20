@@ -23,4 +23,10 @@ export const API_ENDPOINTS = {
     providers: `${API_BASE_URL}/mobile-money/providers`,
     withdraw: `${API_BASE_URL}/mobile-money/withdraw`,
   },
+  kyc: {
+    start: `${API_BASE_URL}/kyc/persona/start`,
+  },
+  user: {
+    profile: `${API_BASE_URL}/profile`,
+  },
 };

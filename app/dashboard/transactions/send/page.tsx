@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { API_ENDPOINTS } from "@/lib/api-config";
 import { toast } from "sonner";
+import KYCModal from "@/components/dashboard/KYCModal";
 
 interface Asset {
   id: string;
@@ -31,6 +32,7 @@ const Page = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [senderWalletId, setSenderWalletId] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showKYCModal, setShowKYCModal] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -114,6 +116,21 @@ const Page = () => {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    // Check KYC status on page load
+    const dashboardDataString = localStorage.getItem("dashboardData");
+    if (dashboardDataString) {
+      try {
+        const dashboardData = JSON.parse(dashboardDataString);
+        if (dashboardData.user && !dashboardData.user.kycVerified) {
+          setShowKYCModal(true);
+        }
+      } catch (e) {
+        console.error("Failed to parse dashboardData for KYC check", e);
+      }
+    }
+  }, []);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -133,6 +150,21 @@ const Page = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check KYC status before proceeding
+    const dashboardDataString = localStorage.getItem("dashboardData");
+    if (dashboardDataString) {
+      try {
+        const dashboardData = JSON.parse(dashboardDataString);
+        if (dashboardData.user && !dashboardData.user.kycVerified) {
+          toast.error("KYC verification is required to send money. Please verify your identity first.");
+          return;
+        }
+      } catch (e) {
+        console.error("Failed to parse dashboardData for KYC check", e);
+      }
+    }
+
     setShowConfirm(true);
   };
 
@@ -277,6 +309,24 @@ const Page = () => {
           </div>
         </div>
       )}
+      <KYCModal
+        isOpen={showKYCModal}
+        onClose={() => setShowKYCModal(false)}
+        walletAddress={
+          (() => {
+            try {
+              const dashboardDataString = localStorage.getItem("dashboardData");
+              if (dashboardDataString) {
+                const dashboardData = JSON.parse(dashboardDataString);
+                return dashboardData.wallets?.[0]?.walletAddress || "";
+              }
+            } catch (e) {
+              console.error("Failed to parse dashboardData for walletAddress", e);
+            }
+            return "";
+          })()
+        }
+      />
     </div>
   );
 };
