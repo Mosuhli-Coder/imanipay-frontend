@@ -26,13 +26,13 @@ export default function About() {
                         <div className="w-full lg:w-1/2 order-2 lg:order-1">
                             <h2 className="text-3xl font-bold mb-6 text-orange-500">Our <span className="text-[#01403A]-800">Story</span></h2>
                             <p className="text-gray-700 mb-6">
-                                ImaniPay Africa was founded in 2025 with a simple mission: to make digital payments accessible, safe, and seamless for businesses of all sizes.
+                                ImaniPay Africa was founded in 2025 with a bold mission — to redefine how digital payments work across Africa. We believe every business, no matter its size, deserves access to fast, secure, and affordable payment solutions.
                             </p>
                             <p className="text-gray-700 mb-6">
-                                What started as a small team with big ideas has grown into a global company serving thousands of businesses across industries.
+                                What began as a small team driven by innovation is now building technology that empowers businesses to move money seamlessly and confidently.
                             </p>
                             <p className="text-gray-700">
-                                Today, we&apos;re proud to be at the forefront of payment technology, constantly evolving our solutions to meet the changing needs of businesses and consumers alike.
+                                We&apos;re not just following global trends — we&apos;re shaping the future of payments in Africa, one transaction at a time.
                             </p>
                         </div>
                         <div className="w-full lg:w-1/2 order-1 lg:order-2">

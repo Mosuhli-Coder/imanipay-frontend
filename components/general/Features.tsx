@@ -10,40 +10,40 @@ import {
 
 const features = [
     {
-        icon: <FiBarChart2 className="w-6 h-6 text-[#2B8C7B]" />,
-        title: "Smart Analytics",
-        description:
-            "Gain valuable insights into your payment trends with our powerful analytics dashboard.",
-    },
-    {
-        icon: <FiLock className="w-6 h-6 text-[#2B8C7B]" />,
-        title: "Secure Payments",
-        description:
-            "Bank-level security with encryption and fraud detection to protect your transactions.",
-    },
-    {
-        icon: <FiUsers className="w-6 h-6 text-[#2B8C7B]" />,
-        title: "User Management",
-        description:
-            "Create and manage user roles with customizable permissions for your team.",
-    },
-    {
-        icon: <FiMonitor className="w-6 h-6 text-[#2B8C7B]" />,
-        title: "Multiple Devices",
-        description:
-            "Access your payment dashboard from any device with our responsive platform.",
-    },
-    {
         icon: <FiZap className="w-6 h-6 text-[#2B8C7B]" />,
-        title: "API Integration",
+        title: "Lower Fees",
         description:
-            "Seamlessly integrate our payment solution with your existing business systems.",
+            "Save money on every transaction with our competitive rates—significantly lower than traditional banks and payment processors.",
     },
     {
         icon: <FiTrendingUp className="w-6 h-6 text-[#2B8C7B]" />,
-        title: "Fast Payouts",
+        title: "Instant Transfers",
         description:
-            "Get paid quickly with our efficient and streamlined payout processing system.",
+            "Send and receive money in seconds, not days. No more waiting for bank transfers or wire delays.",
+    },
+    {
+        icon: <FiLock className="w-6 h-6 text-[#2B8C7B]" />,
+        title: "Bank-Level Security",
+        description:
+            "Your money is protected with enterprise-grade encryption and fraud detection. Sleep soundly knowing your funds are safe.",
+    },
+    {
+        icon: <FiMonitor className="w-6 h-6 text-[#2B8C7B]" />,
+        title: "Easy Mobile Money",
+        description:
+            "Connect your favorite mobile money wallets like M-Pesa, MTN, and Airtel. Pay and get paid using what you already use.",
+    },
+    {
+        icon: <FiBarChart2 className="w-6 h-6 text-[#2B8C7B]" />,
+        title: "Simple Dashboard",
+        description:
+            "Track all your payments in one place. See what's coming in, what's going out, and get insights to grow your business.",
+    },
+    {
+        icon: <FiUsers className="w-6 h-6 text-[#2B8C7B]" />,
+        title: "24/7 Support",
+        description:
+            "Questions? Our friendly support team is here to help in English, Swahili, and other local languages whenever you need us.",
     },
 ];
 

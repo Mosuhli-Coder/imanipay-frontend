@@ -12,24 +12,27 @@ export default function Hero() {
           {/* Left content */}
           <div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight mb-6">
-              ImaniPay: Borderless Payments, Powered by <span className="text-[#00E7B3]">Blockchain</span>
+              Send Money Anywhere, <span className="text-[#00E7B3]">Instantly</span>
             </h1>
+            <p className="text-lg text-gray-300 mb-6 max-w-lg">
+              No confusing steps. No hidden fees. Just peace of mind.
+            </p>
             <p className="text-lg text-gray-300 mb-10 max-w-lg">
-              Instantly send money worldwide using stablecoins and mobile money. Enjoy lower fees, faster transactions, and enhanced security. Join the future of global payments with ImaniPay.
+              Join thousands of businesses already saving time and money with lower fees, faster transactions, and bank-level security.
             </p>
 
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/contact"
+                href="/register"
                 className="btn bg-[#00E7B3] hover:bg-[#00cfa1] text-[#001F1B] font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-200"
               >
                 Get Started
               </Link>
               <Link
-                href="/services"
+                href="/learn-more"
                 className="btn bg-transparent border border-[#00E7B3] text-[#00E7B3] hover:bg-[#00E7B3]/10 font-semibold py-3 px-6 rounded-lg transition-all duration-200"
               >
-                Learn More
+                How It Works
               </Link>
             </div>
 
@@ -68,7 +71,7 @@ export default function Hero() {
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               <Image
                 src="/images/hero-img.jpg"
-                alt="Payment Dashboard"
+                alt="Send money instantly with ImaniPay"
                 className="w-full h-auto rounded-2xl"
                 width={1000}
                 height={1000}
