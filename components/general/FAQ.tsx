@@ -11,70 +11,85 @@ export function FAQ() {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold mb-4 text-orange-400">
-                        How <span className="text-[#01403A]">ImaniPay</span> Works
+                        Frequently Asked <span className="text-[#01403A]">Questions</span>
                     </h2>
                     <p className="text-[#01403A] max-w-xl mx-auto">
-                        Discover the core technologies and infrastructure that power ImaniPay. From blockchain security to seamless mobile money integration, we’re redefining how payments work across Africa and beyond.
+                        Got questions? We&apos;ve got answers. Here&apos;s what our customers commonly ask about using ImaniPay for their payment needs.
                     </p>
                 </div>
 
                 <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto" defaultValue="item-1">
-                    {/* Blockchain Technology */}
+                    {/* How do I send money? */}
                     <AccordionItem value="item-1">
                         <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
-                            Blockchain Technology
+                            How do I send money?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
                             <p>
-                                ImaniPay leverages the Algorand blockchain—a high-performance, scalable, and energy-efficient protocol—to process and validate transactions. This ensures every payment made through our platform is cryptographically secure, transparent, and tamper-proof.
+                                Sending money with ImaniPay is simple! Just log into your dashboard, select &quot;Send Money,&quot; enter the recipient&apos;s details, choose your payment method (bank account, mobile money, or stablecoin), and confirm. Your transfer is processed instantly and arrives in seconds.
                             </p>
                             <p>
-                                By using a decentralized ledger, we remove the need for third-party intermediaries, which not only reduces costs but also increases transaction speed and integrity. Algorand’s fast finality means transactions are confirmed within seconds, making it an ideal fit for real-time business payments and cross-border remittances.
+                                For mobile money transfers, we support M-Pesa, MTN Mobile Money, Airtel Money, and other popular wallets across Africa. No need to switch apps or learn new systems.
                             </p>
                         </AccordionContent>
                     </AccordionItem>
 
-                    {/* Stablecoins */}
+                    {/* Is my money safe? */}
                     <AccordionItem value="item-2">
                         <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
-                            Stablecoins
+                            Is my money safe?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
                             <p>
-                                To avoid the volatility commonly associated with cryptocurrencies, ImaniPay transacts using stablecoins such as USDC (USD Coin) and USDT (Tether). These digital assets are pegged to the US dollar, offering the predictability and stability needed for business payments and financial planning.
+                                Absolutely. We use bank-level security with 256-bit encryption, real-time fraud detection, and blockchain technology to protect every transaction. Your funds are held in secure, regulated accounts and insured up to industry standards.
                             </p>
                             <p>
-                                Stablecoins provide the best of both worlds: the speed and efficiency of blockchain-based assets, combined with the price stability of traditional currencies. They are easily convertible to local fiat currencies, making them highly practical for merchants, freelancers, and enterprises operating in emerging markets.
+                                We never store your payment details, and all transactions are monitored 24/7 by our security team. Millions of transactions have been processed safely through our platform.
                             </p>
                         </AccordionContent>
                     </AccordionItem>
 
-                    {/* Mobile Money Integration */}
+                    {/* What if I have a problem? */}
                     <AccordionItem value="item-3">
                         <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
-                            Mobile Money Integration
+                            What if I have a problem?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
                             <p>
-                                ImaniPay seamlessly integrates with widely used mobile money platforms like M-Pesa, MTN Mobile Money, and Airtel Money. This allows users across Africa to send and receive blockchain-powered payments using channels they already trust and understand.
+                                Our friendly support team is available 24/7 via chat, email, or phone. We speak English, Swahili, French, and other local languages. Most issues are resolved within minutes, and we have a 99.9% customer satisfaction rate.
                             </p>
                             <p>
-                                By bridging the gap between decentralized finance (DeFi) and traditional mobile wallets, we make it easy for individuals and small businesses to access advanced payment infrastructure—without needing to understand how blockchain works under the hood.
+                                For urgent payment issues, contact us immediately through the app or dashboard. We&apos;re here to help you get back to business quickly.
                             </p>
                         </AccordionContent>
                     </AccordionItem>
 
-                    {/* Developer & Merchant APIs */}
+                    {/* How much do you charge? */}
                     <AccordionItem value="item-4">
                         <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
-                            Developer & Merchant APIs
+                            How much do you charge?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
                             <p>
-                                ImaniPay offers a robust and developer-friendly API that enables businesses to integrate payment functionality directly into their apps, websites, or platforms. Whether you&apos;re running a SaaS platform, e-commerce store, or a mobile application, our API makes it simple to onboard users, send payouts, and collect payments.
+                                Our fees are among the lowest in the industry—typically 0.5-1% per transaction, compared to 3-5% at traditional banks. No hidden fees, no monthly charges for basic accounts, and no setup costs.
                             </p>
                             <p>
-                                The integration process is straightforward, and our documentation provides clear guidance for developers of all levels. Best of all, ImaniPay&apos;s transaction fees average below 1%—significantly lower than the traditional 5–10% fees charged by banks and international payment gateways.
+                                Enterprise customers get volume discounts, and we offer free transfers for the first month when you sign up. Check our pricing page for the latest rates.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    {/* How fast are transfers? */}
+                    <AccordionItem value="item-5">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                            How fast are transfers?
+                        </AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
+                            <p>
+                                Most transfers arrive instantly or within seconds. Mobile money payments between supported wallets are immediate. Bank transfers typically take 1-2 business days, but our blockchain-powered stablecoin transfers are always instant.
+                            </p>
+                            <p>
+                                Cross-border payments that used to take 3-5 days now arrive in under a minute. No more waiting for weekends or bank holidays.
                             </p>
                         </AccordionContent>
                     </AccordionItem>
