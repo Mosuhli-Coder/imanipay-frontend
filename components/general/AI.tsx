@@ -1,161 +1,200 @@
-"use client";
-
 import React from 'react'
-import { FiShield, FiMessageSquare, FiZap, FiBarChart, FiGlobe, FiUser } from 'react-icons/fi'
+import { FiCpu, FiZap, FiShield, FiTrendingUp, FiGlobe, FiClock, FiDatabase, FiArrowRight } from 'react-icons/fi'
 
-export default function AI() {
+export default function AISection() {
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24" id="ai">
+        <section className="py-20 md:py-28 bg-white" id="ai">
             <div className="container mx-auto px-4">
                 {/* Header */}
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                        Powered by <span className="text-blue-600">AI</span>
+                <div className="text-center max-w-4xl mx-auto mb-16">
+                    <span className="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-full px-4 py-2 text-sm font-semibold text-teal-600 mb-4">
+                        <FiZap className="w-4 h-4" />
+                        POWERED BY AI
+                    </span>
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+                        Intelligent Payments{' '}
+                        <span className="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
+                            Made Simple
+                        </span>
                     </h2>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        ImaniPay leverages cutting-edge AI technology to revolutionize Africa&#39;s fintech landscape,
-                        providing unmatched security, efficiency, and user experience.
+                    <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                        Our AI-powered platform transforms how businesses handle payments with predictive analytics,
+                        fraud detection, and intelligent automation tailored for African markets.
                     </p>
                 </div>
 
-                {/* AI Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {/* AI Fraud Detection */}
-                    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="flex items-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mr-4">
-                                <FiShield size={32} className="text-red-600" />
+                <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+                    {/* Left Content */}
+                    <div className="space-y-8">
+                        <div className="space-y-6">
+                            <div className="flex items-start gap-4 group">
+                                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-400 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <FiShield className="text-white text-xl" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-3">Smart Fraud Detection</h3>
+                                    <p className="text-gray-600 leading-relaxed text-lg">
+                                        Real-time AI algorithms analyze transaction patterns to detect and prevent fraudulent
+                                        activities before they happen, ensuring your business stays protected 24/7.
+                                    </p>
+                                </div>
                             </div>
-                            <h4 className="text-2xl font-semibold text-gray-900">AI Fraud Detection</h4>
+
+                            <div className="flex items-start gap-4 group">
+                                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <FiTrendingUp className="text-white text-xl" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-3">Predictive Analytics</h3>
+                                    <p className="text-gray-600 leading-relaxed text-lg">
+                                        Advanced machine learning models forecast payment trends and customer behavior,
+                                        helping you make data-driven decisions for business growth.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-4 group">
+                                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <FiGlobe className="text-white text-xl" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-3">Cross-Border Optimization</h3>
+                                    <p className="text-gray-600 leading-relaxed text-lg">
+                                        Intelligent routing ensures the fastest and most cost-effective payment paths
+                                        across African borders, saving you time and money on every transaction.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <p className="text-gray-600 mb-4">
-                            Real-time detection of suspicious transactions using advanced machine learning algorithms.
-                            Identifies unusual patterns, device mismatches, and potential security threats instantly.
-                        </p>
-                        <ul className="text-gray-600 space-y-2">
-                            <li>• Real-time transaction monitoring</li>
-                            <li>• Behavioral pattern analysis</li>
-                            <li>• Instant alerts for suspicious activity</li>
-                        </ul>
+
+                        <button className="group inline-flex items-center gap-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                            <span>Explore AI Features</span>
+                            <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </button>
                     </div>
 
-                    {/* Multilingual AI Chatbot */}
-                    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="flex items-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mr-4">
-                                <FiMessageSquare size={32} className="text-green-600" />
-                            </div>
-                            <h4 className="text-2xl font-semibold text-gray-900">Multilingual AI Chatbot</h4>
-                        </div>
-                        <p className="text-gray-600 mb-4">
-                            24/7 customer support in multiple African languages. Provides instant help with
-                            transaction status, exchange rates, and onboarding guidance.
-                        </p>
-                        <ul className="text-gray-600 space-y-2">
-                            <li>• Support in English, Swahili, Zulu, Sesotho, French</li>
-                            <li>• Instant transaction status updates</li>
-                            <li>• Smart onboarding assistance</li>
-                        </ul>
-                    </div>
+                    {/* Right Visual */}
+                    <div className="relative">
+                        {/* Main AI Visualization */}
+                        <div className="relative bg-white rounded-3xl p-8 shadow-2xl border border-gray-100">
+                            {/* Neural Network Animation */}
+                            <div className="relative h-80 bg-gradient-to-br from-teal-50 to-orange-50 rounded-2xl overflow-hidden">
+                                {/* Animated Nodes */}
+                                <div className="absolute inset-0">
+                                    {/* Network Lines */}
+                                    <div className="absolute inset-0 opacity-30">
+                                        <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border-2 border-teal-300 rounded-full animate-pulse"></div>
+                                        <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 border-2 border-orange-300 rounded-full animate-pulse delay-1000"></div>
+                                    </div>
 
-                    {/* AI KYC/Onboarding */}
-                    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="flex items-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 mr-4">
-                                <FiUser size={32} className="text-purple-600" />
-                            </div>
-                            <h4 className="text-2xl font-semibold text-gray-900">AI KYC/Onboarding</h4>
-                        </div>
-                        <p className="text-gray-600 mb-4">
-                            Automated ID verification, forgery detection, and selfie checks for faster, more secure onboarding.
-                        </p>
-                        <ul className="text-gray-600 space-y-2">
-                            <li>• Automated document verification</li>
-                            <li>• Facial recognition technology</li>
-                            <li>• Reduced onboarding time</li>
-                        </ul>
-                    </div>
+                                    {/* Floating Nodes */}
+                                    <div className="absolute top-1/4 left-1/4 w-4 h-4 bg-teal-500 rounded-full animate-bounce"></div>
+                                    <div className="absolute top-1/3 right-1/3 w-4 h-4 bg-orange-500 rounded-full animate-bounce delay-300"></div>
+                                    <div className="absolute bottom-1/3 left-1/3 w-4 h-4 bg-purple-500 rounded-full animate-bounce delay-700"></div>
+                                    <div className="absolute bottom-1/4 right-1/4 w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-500"></div>
 
-                    {/* Smart Analytics */}
-                    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="flex items-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mr-4">
-                                <FiBarChart size={32} className="text-orange-600" />
+                                    {/* Central Processing Unit */}
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                        <div className="w-16 h-16 bg-gradient-to-br from-teal-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl">
+                                            <FiCpu className="text-white text-2xl" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h4 className="text-2xl font-semibold text-gray-900">Smart Analytics</h4>
-                        </div>
-                        <p className="text-gray-600 mb-4">
-                            AI-powered dashboards for businesses and individuals with spending patterns, revenue forecasts, and personalized insights.
-                        </p>
-                        <ul className="text-gray-600 space-y-2">
-                            <li>• Predictive spending analysis</li>
-                            <li>• Revenue forecasting</li>
-                            <li>• Personalized financial insights</li>
-                        </ul>
-                    </div>
 
-                    {/* AI FX Optimization */}
-                    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="flex items-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mr-4">
-                                <FiGlobe size={32} className="text-blue-600" />
+                            {/* Stats Bar */}
+                            <div className="grid grid-cols-3 gap-4 mt-6">
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-teal-600">99.7%</div>
+                                    <div className="text-sm text-gray-600">Accuracy</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-orange-500">50ms</div>
+                                    <div className="text-sm text-gray-600">Response Time</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-purple-500">24/7</div>
+                                    <div className="text-sm text-gray-600">Monitoring</div>
+                                </div>
                             </div>
-                            <h4 className="text-2xl font-semibold text-gray-900">AI FX Optimization</h4>
                         </div>
-                        <p className="text-gray-600 mb-4">
-                            Predicts currency fluctuations and optimizes stablecoin ↔ fiat settlements at the best times.
-                        </p>
-                        <ul className="text-gray-600 space-y-2">
-                            <li>• Currency fluctuation prediction</li>
-                            <li>• Optimal settlement timing</li>
-                            <li>• Reduced exchange costs</li>
-                        </ul>
-                    </div>
 
-                    {/* Smart Transfer Recommendations */}
-                    <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                        <div className="flex items-center mb-6">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-teal-100 mr-4">
-                                <FiZap size={32} className="text-teal-600" />
+                        {/* Floating Elements */}
+                        <div className="absolute -top-4 -right-4 bg-white rounded-2xl p-4 shadow-xl border border-teal-200">
+                            <div className="flex items-center gap-3">
+                                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                <span className="text-sm font-semibold text-gray-700">AI Active</span>
                             </div>
-                            <h4 className="text-2xl font-semibold text-gray-900">Smart Transfer Recommendations</h4>
                         </div>
-                        <p className="text-gray-600 mb-4">
-                            Suggests cheapest, fastest transfer methods (mobile money, stablecoin, bank) based on real-time data.
-                        </p>
-                        <ul className="text-gray-600 space-y-2">
-                            <li>• Cost optimization</li>
-                            <li>• Speed analysis</li>
-                            <li>• Real-time method comparison</li>
-                        </ul>
+
+                        <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-xl border border-orange-200">
+                            <div className="text-center">
+                                <div className="text-lg font-bold text-orange-500">1M+</div>
+                                <div className="text-xs text-gray-600">Predictions/Day</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Call to Action */}
-                <div className="text-center">
-                    <div className="bg-white rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Experience AI-Powered Finance?</h3>
-                        <p className="text-gray-600 mb-6">
-                            Join ImaniPay and be part of Africa&#39;s AI-driven financial revolution.
-                            Starting with fraud detection and multilingual support, evolving into a comprehensive AI financial platform.
+                {/* Features Grid */}
+                <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 hover:border-teal-200 transition-all duration-500 hover:-translate-y-2">
+                        <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <FiClock className="text-white text-2xl" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">Real-time Processing</h3>
+                        <p className="text-gray-600 leading-relaxed">
+                            Instant payment processing with AI-powered optimization for maximum efficiency and speed.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button
-                                onClick={() => window.location.href = '/register'}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors hover:shadow-lg transform hover:scale-105"
-                            >
-                                Get Started
-                            </button>
-                            <button
-                                onClick={() => window.location.href = '/learn-more'}
-                                className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold transition-colors hover:shadow-lg transform hover:scale-105"
-                            >
-                                Learn More
-                            </button>
+                    </div>
+
+                    <div className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 hover:border-orange-200 transition-all duration-500 hover:-translate-y-2">
+                        <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <FiDatabase className="text-white text-2xl" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">Smart Insights</h3>
+                        <p className="text-gray-600 leading-relaxed">
+                            Deep analytics and actionable insights derived from payment patterns and market trends.
+                        </p>
+                    </div>
+
+                    <div className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 hover:border-purple-200 transition-all duration-500 hover:-translate-y-2">
+                        <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <FiShield className="text-white text-2xl" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">Adaptive Security</h3>
+                        <p className="text-gray-600 leading-relaxed">
+                            Self-learning security systems that evolve to counter emerging threats in real-time.
+                        </p>
+                    </div>
+                </div>
+
+                {/* CTA Section */}
+                <div className="text-center mt-16">
+                    <div className="bg-white rounded-3xl p-12 border border-gray-200 shadow-xl relative overflow-hidden">
+                        {/* Background Pattern */}
+                        <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
+
+                        <div className="relative z-10 max-w-2xl mx-auto">
+                            <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                                Ready to Transform Your Payments with AI?
+                            </h3>
+                            <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+                                Join thousands of businesses already leveraging our intelligent payment platform.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button className="group bg-teal-600 hover:bg-teal-700 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex items-center gap-3 justify-center">
+                                    <span>Start Free Trial</span>
+                                    <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
+                                </button>
+                                <button className="group border-2 border-gray-300 hover:border-teal-300 text-gray-700 hover:text-teal-700 font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                                    Schedule Demo
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }

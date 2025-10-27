@@ -11,15 +11,21 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import PublicRoute from '@/components/auth/PublicRoute';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ResetPasswordPage() {
     return (
         <PublicRoute>
             <Suspense fallback={
-                <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                    <Card className="w-full max-w-md shadow-lg">
+                <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+                    <div className="mb-8 text-center">
+                        <Link href="/" className="inline-block">
+                            <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
+                        </Link>
+                    </div>
+                    <Card className="w-full max-w-md shadow-lg bg-white">
                         <CardHeader>
-                            <CardTitle className="text-2xl text-center">Loading...</CardTitle>
+                            <CardTitle className="text-2xl text-center text-gray-900">Loading...</CardTitle>
                         </CardHeader>
                     </Card>
                 </div>
@@ -61,7 +67,7 @@ function ResetPasswordContent() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (formData.password !== formData.confirmPassword) {
             toast.error('Passwords do not match');
             return;
@@ -77,15 +83,15 @@ function ResetPasswordContent() {
         try {
             await resetPassword(token!, formData.password, formData.confirmPassword);
             toast.success('Password reset successful!');
-            
+
             // Clear form
             setFormData({ password: '', confirmPassword: '' });
-            
+
             // Redirect to login
             setTimeout(() => {
                 router.push('/login');
             }, 2000);
-            
+
         } catch (error: any) {
             toast.error(error.message || 'Failed to reset password');
         } finally {
@@ -95,29 +101,42 @@ function ResetPasswordContent() {
 
     if (isValidating) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <Card className="w-full max-w-md shadow-lg">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+                <div className="mb-8 text-center">
+                    <Link href="/" className="inline-block">
+                        <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
+                    </Link>
+                </div>
+                <Card className="w-full max-w-md shadow-lg bg-white">
                     <CardHeader>
-                        <CardTitle className="text-2xl text-center">Validating...</CardTitle>
+                        <CardTitle className="text-2xl text-center text-gray-900">Validating...</CardTitle>
                     </CardHeader>
                 </Card>
-            </div>
+            </div >
         );
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <Card className="w-full max-w-md shadow-lg">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+            {/* Logo at the top */}
+            <div className="mb-8 text-center">
+                <Link href="/" className="inline-block">
+                    <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
+                </Link>
+            </div>
+
+            {/* White form card */}
+            <Card className="w-full max-w-md shadow-lg bg-white">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center">Reset Password</CardTitle>
-                    <CardDescription className="text-center">
+                    <CardTitle className="text-2xl text-center text-gray-900">Reset Password</CardTitle>
+                    <CardDescription className="text-center text-gray-600">
                         Enter your new password below.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <Label htmlFor="password" className='mb-2'>New Password</Label>
+                            <Label htmlFor="password" className='mb-2 text-gray-700'>New Password</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -128,10 +147,11 @@ function ResetPasswordContent() {
                                 disabled={isLoading}
                                 placeholder="Enter new password"
                                 minLength={6}
+                                className="text-gray-900"
                             />
                         </div>
                         <div>
-                            <Label htmlFor="confirmPassword" className='mb-2'>Confirm New Password</Label>
+                            <Label htmlFor="confirmPassword" className='mb-2 text-gray-700'>Confirm New Password</Label>
                             <Input
                                 id="confirmPassword"
                                 type="password"
@@ -142,16 +162,21 @@ function ResetPasswordContent() {
                                 disabled={isLoading}
                                 placeholder="Confirm new password"
                                 minLength={6}
+                                className="text-gray-900"
                             />
                         </div>
 
-                        <Button type="submit" className="w-full" disabled={isLoading}>
+                        <Button
+                            type="submit"
+                            className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                            disabled={isLoading}
+                        >
                             {isLoading ? 'Resetting...' : 'Reset Password'}
                         </Button>
                     </form>
 
                     <div className="mt-4 text-center">
-                        <Link href="/login" className="text-sm text-blue-600 hover:underline">
+                        <Link href="/login" className="text-sm text-teal-600 hover:text-teal-700 hover:underline">
                             Back to Login
                         </Link>
                     </div>

@@ -3,13 +3,15 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default function RegisterPage() {
+export default function VerifyOtpPage() {
   const router = useRouter();
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
@@ -111,15 +113,23 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+      {/* Logo at the top */}
+      <div className="mb-8 text-center">
+        <Link href="/" className="inline-block">
+          <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
+        </Link>
+      </div>
+
+      {/* White form card */}
+      <Card className="w-full max-w-md shadow-lg bg-white">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Verify Your Account</CardTitle>
+          <CardTitle className="text-2xl text-center text-gray-900">Verify Your Account</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="email" className="mb-2">Email</Label>
+              <Label htmlFor="email" className="mb-2 text-gray-700">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -127,26 +137,29 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleEmailChange}
                 required
+                className="text-gray-900"
               />
             </div>
 
             <div>
-              <Label className="mb-2">OTP (6 digits)</Label>
+              <Label className="mb-2 text-gray-700">OTP (6 digits)</Label>
               <div className="flex gap-2 justify-center">
                 {formData.otp.map((digit, index) => (
                   <Input
                     key={index}
-                    // ref={(el) => (inputsRef.current[index] = el)}
+                    ref={(el) => {
+                      inputsRef.current[index] = el;
+                    }}
                     id={`otp-${index}`}
-                    type="text"               // <-- no spinners
-                    inputMode="numeric"       // numeric keypad on mobile
+                    type="text"
+                    inputMode="numeric"
                     pattern="\d*"
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     onPaste={(e) => handleOtpPaste(index, e)}
-                    className="w-12 h-12 text-center text-xl"
+                    className="w-12 h-12 text-center text-xl text-gray-900"
                     aria-label={`OTP digit ${index + 1}`}
                     required
                   />
@@ -154,7 +167,12 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full">Verify</Button>
+            <Button
+              type="submit"
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+            >
+              Verify
+            </Button>
           </form>
         </CardContent>
       </Card>
