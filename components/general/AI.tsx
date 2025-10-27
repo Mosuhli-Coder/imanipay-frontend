@@ -1,11 +1,9 @@
-"use client";
-
 import React from 'react'
 import { FiShield, FiMessageSquare, FiZap } from 'react-icons/fi'
 
-export default function AI() {
+export default function AISection() {
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24" id="ai">
+        <section className="py-20 md:py-28 bg-white" id="ai">
             <div className="container mx-auto px-4">
                 {/* Header */}
                 <div className="text-center mb-16">
@@ -113,6 +111,6 @@ export default function AI() {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
