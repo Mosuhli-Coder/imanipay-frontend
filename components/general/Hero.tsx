@@ -71,36 +71,22 @@ export default function Hero() {
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left content */}
-          <div className="space-y-8">
-            {/* Enhanced Badge */}
-            <div className="inline-flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-xl px-4 py-2 shadow-lg">
-              <div className="w-2 h-2 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full animate-pulse shadow-lg shadow-teal-500/30"></div>
-              <span className="text-teal-700 font-semibold text-xs tracking-wide">Next-Gen Payment Platform</span>
-            </div>
-
-            {/* Enhanced Main heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
-              Borderless{' '}
-              <span className="relative">
-                <span className="relative z-10 bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
-                  Payments
-                </span>
-                <div className="absolute bottom-2 left-0 w-full h-3 bg-gradient-to-r from-teal-500/20 to-emerald-500/20 blur-md -z-0"></div>
-              </span>
-              , Blockchain Powered
+          <div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight mb-6">
+              Send Money Anywhere, <span className="text-[#00E7B3]">Instantly</span>
             </h1>
-
-            {/* Enhanced Description */}
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl font-light tracking-wide">
-              Instantly send money worldwide using stablecoins and mobile money. Enjoy lower fees,
-              faster transactions, and enhanced security with our cutting-edge blockchain technology.
+            <p className="text-lg text-gray-300 mb-6 max-w-lg">
+              No confusing steps. No hidden fees. Just peace of mind.
+            </p>
+            <p className="text-lg text-gray-300 mb-10 max-w-lg">
+              Join thousands of businesses already saving time and money with lower fees, faster transactions, and bank-level security.
             </p>
 
             {/* Enhanced CTA Buttons */}
             <div className="flex flex-wrap gap-4 pt-2">
               <Link
-                href="/contact"
-                className="group relative bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-bold py-4 px-8 rounded-xl shadow-2xl hover:shadow-[0_0_60px_rgba(5,150,105,0.4)] transition-all duration-500 hover:scale-105 hover:-translate-y-1"
+                href="/register"
+                className="btn bg-[#00E7B3] hover:bg-[#00cfa1] text-[#001F1B] font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-200"
               >
                 <span className="relative z-10 tracking-wide text-sm">Get Started Free</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -108,15 +94,10 @@ export default function Hero() {
               </Link>
 
               <Link
-                href="/services"
-                className="group relative bg-transparent border-2 border-gray-300 text-gray-700 font-semibold py-4 px-8 rounded-xl hover:border-teal-500 hover:bg-teal-50/50 transition-all duration-500 hover:scale-105 hover:-translate-y-1"
+                href="/learn-more"
+                className="btn bg-transparent border border-[#00E7B3] text-[#00E7B3] hover:bg-[#00E7B3]/10 font-semibold py-3 px-6 rounded-lg transition-all duration-200"
               >
-                <span className="flex items-center gap-2 tracking-wide text-sm">
-                  Watch Demo
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </span>
+                How It Works
               </Link>
             </div>
           </div>
@@ -126,11 +107,11 @@ export default function Hero() {
             {/* Main image container */}
             <div className="relative z-10 transform hover:scale-[1.02] transition-transform duration-700">
               <Image
-                src="/images/hero.png"
-                alt="ImaniPay Dashboard Interface"
-                className="w-full h-auto rounded-2xl shadow-2xl border border-gray-200"
-                width={500}
-                height={500}
+                src="/images/hero-img.jpg"
+                alt="Send money instantly with ImaniPay"
+                className="w-full h-auto rounded-2xl"
+                width={1000}
+                height={1000}
                 priority
               />
             </div>

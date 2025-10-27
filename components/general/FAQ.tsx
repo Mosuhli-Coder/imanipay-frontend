@@ -35,79 +35,94 @@ const faqData: FAQItem[] = [
 ]
 
 export function FAQ() {
-    const [openIndex, setOpenIndex] = useState<number | null>(0)
-
-    const toggleAccordion = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index)
-    }
-
     return (
-        <div className="max-w-4xl mx-auto">
-            <div className="grid gap-4">
-                {faqData.map((item, index) => (
-                    <div
-                        key={index}
-                        className="group bg-white rounded-2xl border border-gray-200 hover:border-teal-200 transition-all duration-300 hover:shadow-lg"
-                    >
-                        <button
-                            onClick={() => toggleAccordion(index)}
-                            className="w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-teal-500/20 rounded-2xl"
-                        >
-                            <div className="flex items-start gap-4">
-                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${openIndex === index
-                                        ? 'bg-gradient-to-br from-teal-500 to-emerald-500 text-white'
-                                        : 'bg-gray-100 text-gray-600 group-hover:bg-teal-50 group-hover:text-teal-600'
-                                    }`}>
-                                    {openIndex === index ? (
-                                        <FiMinus className="w-4 h-4" />
-                                    ) : (
-                                        <FiPlus className="w-4 h-4" />
-                                    )}
-                                </div>
-                                <span className={`text-lg font-semibold pr-4 transition-colors duration-300 ${openIndex === index ? 'text-gray-900' : 'text-gray-800 group-hover:text-teal-700'
-                                    }`}>
-                                    {item.question}
-                                </span>
-                            </div>
-
-                            <div className={`flex-shrink-0 w-6 h-6 flex items-center justify-center transition-all duration-300 ${openIndex === index ? 'rotate-90 text-teal-600' : 'text-gray-400 group-hover:text-teal-500'
-                                }`}>
-                                <FiArrowRight className="w-4 h-4" />
-                            </div>
-                        </button>
-
-                        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                            }`}>
-                            <div className="px-6 pb-6 ml-12">
-                                <div className="w-12 h-1 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full mb-4"></div>
-                                <p className="text-gray-600 leading-relaxed text-lg">
-                                    {item.answer}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Support CTA */}
-            <div className="mt-12 text-center">
-                <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl p-8 border border-teal-100">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                        Still have questions?
-                    </h3>
-                    <p className="text-gray-600 mb-6 text-lg">
-                        Our support team is here to help you get the answers you need.
+        <section className="py-16 bg-white">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold mb-4 text-orange-400">
+                        Frequently Asked <span className="text-[#01403A]">Questions</span>
+                    </h2>
+                    <p className="text-[#01403A] max-w-xl mx-auto">
+                        Got questions? We&apos;ve got answers. Here&apos;s what our customers commonly ask about using ImaniPay for their payment needs.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="group bg-teal-600 hover:bg-teal-700 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex items-center gap-3">
-                            <span>Contact Support</span>
-                            <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
-                        </button>
-                        <button className="group border-2 border-gray-300 hover:border-teal-300 text-gray-700 hover:text-teal-700 font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-                            Schedule a Demo
-                        </button>
-                    </div>
                 </div>
+
+                <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto" defaultValue="item-1">
+                    {/* How do I send money? */}
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                            How do I send money?
+                        </AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
+                            <p>
+                                Sending money with ImaniPay is simple! Just log into your dashboard, select &quot;Send Money,&quot; enter the recipient&apos;s details, choose your payment method (bank account, mobile money, or stablecoin), and confirm. Your transfer is processed instantly and arrives in seconds.
+                            </p>
+                            <p>
+                                For mobile money transfers, we support M-Pesa, MTN Mobile Money, Airtel Money, and other popular wallets across Africa. No need to switch apps or learn new systems.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    {/* Is my money safe? */}
+                    <AccordionItem value="item-2">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                            Is my money safe?
+                        </AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
+                            <p>
+                                Absolutely. We use bank-level security with 256-bit encryption, real-time fraud detection, and blockchain technology to protect every transaction. Your funds are held in secure, regulated accounts and insured up to industry standards.
+                            </p>
+                            <p>
+                                We never store your payment details, and all transactions are monitored 24/7 by our security team. Millions of transactions have been processed safely through our platform.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    {/* What if I have a problem? */}
+                    <AccordionItem value="item-3">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                            What if I have a problem?
+                        </AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
+                            <p>
+                                Our friendly support team is available 24/7 via chat, email, or phone. We speak English, Swahili, French, and other local languages. Most issues are resolved within minutes, and we have a 99.9% customer satisfaction rate.
+                            </p>
+                            <p>
+                                For urgent payment issues, contact us immediately through the app or dashboard. We&apos;re here to help you get back to business quickly.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    {/* How much do you charge? */}
+                    <AccordionItem value="item-4">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                            How much do you charge?
+                        </AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
+                            <p>
+                                Our fees are among the lowest in the industry—typically 0.5-1% per transaction, compared to 3-5% at traditional banks. No hidden fees, no monthly charges for basic accounts, and no setup costs.
+                            </p>
+                            <p>
+                                Enterprise customers get volume discounts, and we offer free transfers for the first month when you sign up. Check our pricing page for the latest rates.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    {/* How fast are transfers? */}
+                    <AccordionItem value="item-5">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                            How fast are transfers?
+                        </AccordionTrigger>
+                        <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
+                            <p>
+                                Most transfers arrive instantly or within seconds. Mobile money payments between supported wallets are immediate. Bank transfers typically take 1-2 business days, but our blockchain-powered stablecoin transfers are always instant.
+                            </p>
+                            <p>
+                                Cross-border payments that used to take 3-5 days now arrive in under a minute. No more waiting for weekends or bank holidays.
+                            </p>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
         </div>
     )

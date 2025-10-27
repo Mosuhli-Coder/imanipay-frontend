@@ -35,30 +35,18 @@ export default function About() {
             {/* Our Story - Enhanced */}
             <section className="section bg-white py-20 md:py-28">
                 <div className="container mx-auto px-4">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <div className="relative">
-                            {/* Modern Image Container */}
-                            <div className="relative group">
-                                <div className="absolute -inset-4 bg-gradient-to-r from-orange-400/10 to-teal-400/10 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
-                                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
-                                    <Image
-                                        src="/images/about-img.jpg"
-                                        alt="ImaniPay Africa team collaboration"
-                                        className="w-full h-[400px] object-cover transform group-hover:scale-105 transition-transform duration-700"
-                                        width={600}
-                                        height={400}
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-                                </div>
-                            </div>
-
-                            {/* Floating Stats */}
-                            <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-6 shadow-2xl border border-gray-200">
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-teal-600 mb-1">2025</div>
-                                    <div className="text-sm text-gray-600">Founded</div>
-                                </div>
-                            </div>
+                    <div className="flex flex-col lg:flex-row items-center gap-12">
+                        <div className="w-full lg:w-1/2 order-2 lg:order-1">
+                            <h2 className="text-3xl font-bold mb-6 text-orange-500">Our <span className="text-[#01403A]-800">Story</span></h2>
+                            <p className="text-gray-700 mb-6">
+                                ImaniPay Africa was founded in 2025 with a bold mission — to redefine how digital payments work across Africa. We believe every business, no matter its size, deserves access to fast, secure, and affordable payment solutions.
+                            </p>
+                            <p className="text-gray-700 mb-6">
+                                What began as a small team driven by innovation is now building technology that empowers businesses to move money seamlessly and confidently.
+                            </p>
+                            <p className="text-gray-700">
+                                We&apos;re not just following global trends — we&apos;re shaping the future of payments in Africa, one transaction at a time.
+                            </p>
                         </div>
 
                         <div className="space-y-8">
