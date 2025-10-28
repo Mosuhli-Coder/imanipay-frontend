@@ -95,7 +95,7 @@ export default function Hero() {
 
               <Link
                 href="/learn-more"
-                className="btn bg-transparent border border-[#00E7B3] text-[#00E7B3] hover:bg-[#00E7B3]/10 font-semibold py-3 px-6 rounded-lg transition-all duration-200"
+                className="btn bg-transparent border border-[#00E7B3] text-[#001F1B] hover:bg-[#00E7B3]/10 font-semibold py-3 px-6 rounded-lg transition-all duration-200"
               >
                 How It Works
               </Link>
