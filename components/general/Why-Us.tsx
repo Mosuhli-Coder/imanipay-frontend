@@ -12,7 +12,7 @@ export default function WhyUs() {
             WHY CHOOSE IMANIPAY
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-            Built for Africa's{' '}
+            Built for Africa&apos;s{' '}
             <span className="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
               Digital Future
             </span>

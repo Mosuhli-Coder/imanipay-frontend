@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FiDollarSign, FiZap, FiShield, FiSmartphone, FiClock, FiHeadphones } from 'react-icons/fi';
+import { FiZap, FiShield, FiSmartphone, FiHeadphones } from 'react-icons/fi';
 
 const LearnMorePage = () => {
   return (

@@ -16,27 +16,29 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const [theme, setTheme] = useState<Theme>("light");
-    const [isInitialized, setIsInitialized] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
+    // Only update theme after component mounts to avoid hydration mismatch
     useEffect(() => {
-        // This code will only run on the client side
-        const savedTheme = localStorage.getItem("theme") as Theme | null;
-        const initialTheme = savedTheme || "light"; // Default to light theme
-
-        setTheme(initialTheme);
-        setIsInitialized(true);
+        const savedTheme = window.localStorage.getItem("theme") as Theme | null;
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            setTheme("dark");
+        }
+        setMounted(true);
     }, []);
 
     useEffect(() => {
-        if (isInitialized) {
-            localStorage.setItem("theme", theme);
+        if (mounted) {
+            window.localStorage.setItem("theme", theme);
             if (theme === "dark") {
                 document.documentElement.classList.add("dark");
             } else {
                 document.documentElement.classList.remove("dark");
             }
         }
-    }, [theme, isInitialized]);
+    }, [theme, mounted]);
 
     const toggleTheme = () => {
         setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
