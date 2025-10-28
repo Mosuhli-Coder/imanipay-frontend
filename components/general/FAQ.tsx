@@ -1,38 +1,10 @@
 "use client"
 import React, { useState, createContext, useContext, ReactNode } from 'react'
-import { FiPlus, FiMinus, FiArrowRight } from 'react-icons/fi'
+import { FiPlus, FiMinus } from 'react-icons/fi'
 
-interface FAQItem {
-    question: string
-    answer: string
-}
 
-const faqData: FAQItem[] = [
-    {
-        question: "How does ImaniPay ensure the security of transactions?",
-        answer: "We use bank-level encryption, multi-factor authentication, and real-time fraud monitoring. All transactions are protected with SSL encryption and comply with PCI DSS standards to ensure your funds and data are always secure."
-    },
-    {
-        question: "What countries do you currently operate in?",
-        answer: "We currently serve 25+ African countries including Nigeria, Kenya, Ghana, South Africa, Egypt, and Rwanda. We're continuously expanding to bring seamless payments to more regions across the continent."
-    },
-    {
-        question: "How long do international transfers take?",
-        answer: "Most international transfers are completed within 2-4 hours. Some regions may experience slightly longer processing times depending on local banking regulations and partner networks."
-    },
-    {
-        question: "What are your transaction fees?",
-        answer: "We offer competitive pricing with local transfers starting at 0.5% and international transfers at 1.5%. Volume discounts and custom enterprise pricing are available for businesses processing large amounts."
-    },
-    {
-        question: "Can I integrate ImaniPay with my existing platform?",
-        answer: "Yes! We provide comprehensive APIs, SDKs, and plugins for popular e-commerce platforms. Our developer documentation makes integration straightforward, and our support team is available to assist with implementation."
-    },
-    {
-        question: "Do you support mobile money payments?",
-        answer: "Absolutely. We support all major mobile money providers across Africa including M-Pesa, MTN Mobile Money, Airtel Money, and Orange Money, enabling seamless payments for both urban and rural customers."
-    }
-]
+
+
 
 /**
  * Lightweight local Accordion implementation to satisfy the component usage in this file.

@@ -7,9 +7,6 @@ import {
     FiZap,
     FiTrendingUp,
     FiArrowRight,
-    FiShield,
-    FiCode,
-    FiSmartphone,
 } from 'react-icons/fi';
 
 const features = [
@@ -80,18 +77,6 @@ export default function Features() {
                             key={index}
                             className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 hover:border-teal-200 transition-all duration-500 hover:-translate-y-2"
                         >
-                            {/* Background Gradient Effect */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgGradient} opacity-0 group-hover:opacity-100 rounded-3xl transition-opacity duration-500 -z-10`}></div>
-
-                            {/* Icon Container */}
-                            <div className={`relative w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                                <div className="text-white">
-                                    {feature.icon}
-                                </div>
-                                {/* Icon Glow */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-500`}></div>
-                            </div>
-
                             {/* Content */}
                             <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-gray-800 transition-colors duration-300">
                                 {feature.title}
@@ -105,9 +90,6 @@ export default function Features() {
                                 <span>Learn more</span>
                                 <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                             </div>
-
-                            {/* Hover Border Effect */}
-                            <div className={`absolute inset-0 border-2 border-transparent group-hover:border-${feature.borderColor} rounded-3xl transition-all duration-500 opacity-0 group-hover:opacity-100 -z-5`}></div>
                         </div>
                     ))}
                 </div>
