@@ -9,24 +9,17 @@ export const metadata: Metadata = {
   description: "Smart Payment Solutions for Modern Businesses in Africa",
 };
 
-export default function RootLayout({
+export default function PagesLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-
-        <Navbar />
-        {children}
-        <Footer />
-
-        <Analytics />
-        <Toaster />
-      </body>
-    </html>
+    <div className="antialiased">
+      <Navbar />
+      {children}
+      <Footer />
+      <Toaster />
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, createContext, useContext, ReactNode } from 'react'
 import { FiPlus, FiMinus, FiArrowRight } from 'react-icons/fi'
 
 interface FAQItem {
@@ -34,6 +34,115 @@ const faqData: FAQItem[] = [
     }
 ]
 
+/**
+ * Lightweight local Accordion implementation to satisfy the component usage in this file.
+ * Supports single-type accordion with optional collapsible behavior.
+ */
+
+type AccordionType = 'single' | 'multiple'
+
+interface AccordionContextValue {
+    open?: string
+    setOpen: (val?: string) => void
+    collapsible?: boolean
+    type?: AccordionType
+}
+
+const AccordionContext = createContext<AccordionContextValue>({
+    open: undefined,
+    setOpen: () => {},
+    collapsible: false,
+    type: 'single',
+})
+
+const ItemContext = createContext<{ value?: string }>({ value: undefined })
+
+interface AccordionProps {
+    children: ReactNode
+    type?: AccordionType
+    collapsible?: boolean
+    className?: string
+    defaultValue?: string
+}
+
+export const Accordion: React.FC<AccordionProps> = ({ children, type = 'single', collapsible = false, defaultValue }) => {
+    const [open, setOpenState] = useState<string | undefined>(defaultValue)
+    const setOpen = (val?: string) => {
+        if (type === 'single') {
+            if (open === val) {
+                if (collapsible) setOpenState(undefined)
+            } else {
+                setOpenState(val)
+            }
+        } else {
+            // For simplicity, in a multiple mode we'll just set the last opened item
+            setOpenState(val)
+        }
+    }
+
+    return (
+        <AccordionContext.Provider value={{ open, setOpen, collapsible, type }}>
+            {children}
+        </AccordionContext.Provider>
+    )
+}
+
+interface AccordionItemProps {
+    children: ReactNode
+    value: string
+}
+
+export const AccordionItem: React.FC<AccordionItemProps> = ({ children, value }) => {
+    return (
+        <ItemContext.Provider value={{ value }}>
+            <div className="border-b last:border-b-0 py-4" data-value={value}>
+                {children}
+            </div>
+        </ItemContext.Provider>
+    )
+}
+
+type TriggerProps = {
+    children?: ReactNode
+    className?: string
+    value?: string
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
+
+export const AccordionTrigger: React.FC<TriggerProps> = ({ children, className, value, ...props }) => {
+    const { open, setOpen } = useContext(AccordionContext)
+    const isOpen = open === value
+    return (
+        <button
+            {...props}
+            onClick={(e) => {
+                e.preventDefault()
+                setOpen(isOpen ? undefined : value)
+            }}
+            className={`flex items-center justify-between w-full ${className ?? ''}`}
+        >
+            <span>{children}</span>
+            <span className="ml-4">{isOpen ? <FiMinus /> : <FiPlus />}</span>
+        </button>
+    )
+}
+
+interface AccordionContentProps {
+    children?: ReactNode
+    className?: string
+}
+
+export const AccordionContent: React.FC<AccordionContentProps> = ({ children, className }) => {
+    const { open } = useContext(AccordionContext)
+    const { value } = useContext(ItemContext)
+    const isOpen = open === value
+
+    return (
+        <div className={`${className ?? ''}`} style={{ display: isOpen ? undefined : 'none' }}>
+            {children}
+        </div>
+    )
+}
+
 export function FAQ() {
     return (
         <section className="py-16 bg-white">
@@ -50,7 +159,7 @@ export function FAQ() {
                 <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto" defaultValue="item-1">
                     {/* How do I send money? */}
                     <AccordionItem value="item-1">
-                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500" value="item-1">
                             How do I send money?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
@@ -65,7 +174,7 @@ export function FAQ() {
 
                     {/* Is my money safe? */}
                     <AccordionItem value="item-2">
-                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500" value="item-2">
                             Is my money safe?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
@@ -80,7 +189,7 @@ export function FAQ() {
 
                     {/* What if I have a problem? */}
                     <AccordionItem value="item-3">
-                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500" value="item-3">
                             What if I have a problem?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
@@ -95,7 +204,7 @@ export function FAQ() {
 
                     {/* How much do you charge? */}
                     <AccordionItem value="item-4">
-                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500" value="item-4">
                             How much do you charge?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
@@ -110,7 +219,7 @@ export function FAQ() {
 
                     {/* How fast are transfers? */}
                     <AccordionItem value="item-5">
-                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500">
+                        <AccordionTrigger className="text-lg font-medium text-[#01403A] hover:text-orange-500" value="item-5">
                             How fast are transfers?
                         </AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-gray-700 text-base leading-relaxed">
@@ -124,6 +233,6 @@ export function FAQ() {
                     </AccordionItem>
                 </Accordion>
             </div>
-        </div>
+        </section>
     )
 }
