@@ -52,20 +52,23 @@ export default function LoginPage() {
 
     return (
         <PublicRoute>
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+                {/* Logo at the top */}
                 <div className="mb-8 text-center">
                     <Link href="/" className="inline-block">
                         <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
                     </Link>
                 </div>
-                <Card className="w-full max-w-md shadow-lg">
+                
+                {/* White form card with proper text colors */}
+                <Card className="w-full max-w-md shadow-lg bg-white">
                     <CardHeader>
-                        <CardTitle className="text-2xl text-center">Login</CardTitle>
+                        <CardTitle className="text-2xl text-center text-gray-900">Login</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <Label htmlFor="email" className='mb-2'>Email</Label>
+                                <Label htmlFor="email" className='mb-2 text-gray-700'>Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -74,10 +77,11 @@ export default function LoginPage() {
                                     onChange={handleChange}
                                     required
                                     disabled={isLoading}
+                                    className="text-gray-900"
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="password" className='mb-2'>Password</Label>
+                                <Label htmlFor="password" className='mb-2 text-gray-700'>Password</Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -86,19 +90,24 @@ export default function LoginPage() {
                                     onChange={handleChange}
                                     required
                                     disabled={isLoading}
+                                    className="text-gray-900"
                                 />
                             </div>
 
                             <div className="text-right">
                                 <a 
                                     href="/forgot-password" 
-                                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                                    className="text-sm text-teal-600 hover:text-tealy-800 hover:underline"
                                 >
                                     Forgot password?
                                 </a>
                             </div>
 
-                            <Button type="submit" className="w-full" disabled={isLoading}>
+                            <Button 
+                                type="submit" 
+                                className="w-full bg-teal-600 hover:bg-teal-700 text-white" 
+                                disabled={isLoading}
+                            >
                                 {isLoading ? 'Logging in...' : 'Login'}
                             </Button>
                         </form>
