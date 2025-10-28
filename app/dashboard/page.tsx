@@ -69,6 +69,8 @@ const DashboardPage = () => {
     }
   }, [loading, isAuthenticated]);
 
+
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!isAuthenticated) return;
@@ -94,8 +96,6 @@ const DashboardPage = () => {
 
         const data = await response.json();
         setDashboardData(data);
-        // Store dashboard data in localStorage for use in other pages
-        localStorage.setItem("dashboardData", JSON.stringify(data));
 
         // Auto-show KYC modal if user is not verified
         if (data.user && !data.user.kycVerified) {

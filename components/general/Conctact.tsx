@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { FiSend, FiUser, FiMail, FiPhone, FiMessageSquare, FiCheck, FiArrowRight, FiMapPin } from 'react-icons/fi'
+import { FiSend, FiUser, FiMail, FiPhone, FiMessageSquare, FiArrowRight, FiMapPin } from 'react-icons/fi'
 
 export default function ContactPage() {
     const [form, setForm] = useState({
@@ -45,7 +45,7 @@ export default function ContactPage() {
             const data = await res.json()
 
             if (res.ok) {
-                toast.success('🎉 Message sent successfully! We\'ll get back to you within 24 hours.')
+                toast.success('🎉 Message sent successfully! We&apos;ll get back to you within 24 hours.')
                 setForm({
                     firstName: '',
                     lastName: '',
@@ -75,13 +75,13 @@ export default function ContactPage() {
                         GET IN TOUCH
                     </span>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-                        Let's Start a{' '}
+                        Let&apos;s Start a{' '}
                         <span className="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
                             Conversation
                         </span>
                     </h1>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                        Have questions about our payment solutions? We're here to help and would love to hear from you.
+                        Have questions about our payment solutions? We&apos;re here to help and would love to hear from you.
                     </p>
                 </div>
 
@@ -122,7 +122,7 @@ export default function ContactPage() {
                                     <div>
                                         <h4 className="font-semibold text-gray-900 mb-1">Email us</h4>
                                         <p className="text-gray-600">teboho.mosuhli97@gmail.com</p>
-                                        <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                        <p className="text-sm text-gray-500">We&apos;ll respond within 24 hours</p>
                                     </div>
                                 </div>
                             </div>

@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { FiShield, FiMessageSquare, FiZap } from 'react-icons/fi'
 

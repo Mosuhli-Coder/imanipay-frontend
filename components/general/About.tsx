@@ -1,6 +1,5 @@
-import Image from 'next/image'
 import React from 'react'
-import { FiPlus, FiLock, FiUser, FiArrowRight, FiGlobe, FiShield, FiUsers } from 'react-icons/fi'
+import { FiArrowRight, FiGlobe, FiShield, FiUsers } from 'react-icons/fi'
 import { FAQ } from "@/components/general/FAQ";
 
 export default function About() {
@@ -39,13 +38,13 @@ export default function About() {
                         <div className="w-full lg:w-1/2 order-2 lg:order-1">
                             <h2 className="text-3xl font-bold mb-6 text-orange-500">Our <span className="text-[#01403A]-800">Story</span></h2>
                             <p className="text-gray-700 mb-6">
-                                ImaniPay Africa was founded in 2025 with a bold mission — to redefine how digital payments work across Africa. We believe every business, no matter its size, deserves access to fast, secure, and affordable payment solutions.
+                                ImaniPay Africa was founded in 2025 with a bold mission &mdash; to redefine how digital payments work across Africa. We believe every business, no matter its size, deserves access to fast, secure, and affordable payment solutions.
                             </p>
                             <p className="text-gray-700 mb-6">
                                 What began as a small team driven by innovation is now building technology that empowers businesses to move money seamlessly and confidently.
                             </p>
                             <p className="text-gray-700">
-                                We&apos;re not just following global trends — we&apos;re shaping the future of payments in Africa, one transaction at a time.
+                                We&apos;re not just following global trends &mdash; we&apos;re shaping the future of payments in Africa, one transaction at a time.
                             </p>
                         </div>
 
@@ -66,13 +65,13 @@ export default function About() {
                                     infrastructure they deserve.
                                 </p>
                                 <p>
-                                    Starting with a small but passionate team, we've grown into a trusted partner for thousands
+                                    Starting with a small but passionate team, we&apos;ve grown into a trusted partner for thousands
                                     of businesses, enabling seamless cross-border transactions and driving economic growth
                                     through innovative payment solutions.
                                 </p>
                                 <p>
-                                    Today, we're at the forefront of Africa's digital transformation, constantly evolving to
-                                    meet the unique challenges and opportunities of the continent's dynamic markets.
+                                    Today, we&apos;re at the forefront of Africa&apos;s digital transformation, constantly evolving to
+                                    meet the unique challenges and opportunities of the continent&apos;s dynamic markets.
                                 </p>
                             </div>
 
@@ -187,7 +186,7 @@ export default function About() {
                             <span className="text-teal-600">Questions</span>
                         </h2>
                         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            Everything you need to know about ImaniPay Africa. Can't find the answer you're looking for?
+                            Everything you need to know about ImaniPay Africa. Can&apos;t find the answer you&apos;re looking for?
                             Please chat to our friendly team.
                         </p>
                     </div>
