@@ -2,13 +2,14 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { FiSend, FiUser, FiMail, FiPhone, FiMessageSquare, FiArrowRight, FiMapPin } from 'react-icons/fi'
+import { API_ENDPOINTS } from '@/lib/api-config'
 
 export default function ContactPage() {
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
         email: '',
-        phone: '',
+        phoneNumber: '',
         message: '',
         agreed: false,
     })
@@ -36,7 +37,7 @@ export default function ContactPage() {
         setIsLoading(true)
 
         try {
-            const res = await fetch('/api/contact', {
+            const res = await fetch(API_ENDPOINTS.contact.sendMessage, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
@@ -45,12 +46,12 @@ export default function ContactPage() {
             const data = await res.json()
 
             if (res.ok) {
-                toast.success('🎉 Message sent successfully! We&apos;ll get back to you within 24 hours.')
+                toast.success('🎉 Message sent successfully! We will get back to you within 24 hours.')
                 setForm({
                     firstName: '',
                     lastName: '',
                     email: '',
-                    phone: '',
+                    phoneNumber: '',
                     message: '',
                     agreed: false,
                 })
@@ -197,8 +198,8 @@ export default function ContactPage() {
                                 <div className="relative">
                                     <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                                     <input
-                                        name="phone"
-                                        value={form.phone}
+                                        name="phoneNumber"
+                                        value={form.phoneNumber}
                                         onChange={handleChange}
                                         placeholder="+266 123 456 78"
                                         className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50"

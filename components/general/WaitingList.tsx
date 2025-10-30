@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { FiMail, FiArrowRight, FiCheck, FiZap } from 'react-icons/fi';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
 export default function WaitingList() {
     const [formData, setFormData] = useState({ email: '' });
@@ -22,7 +23,7 @@ export default function WaitingList() {
         setIsLoading(true);
 
         try {
-            const res = await fetch('/api/waitinglist', {
+            const res = await fetch(API_ENDPOINTS.waitinglist, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
