@@ -37,8 +37,8 @@ interface WithdrawResponse {
 const CURRENCIES = [
   { value: "ALGO", label: "ALGO" },
   { value: "USDC", label: "USDC" },
-  { value: "USDT", label: "USDT" },
-  { value: "LSL", label: "LSL" },
+  // { value: "USDT", label: "USDT" },
+ 
 ];
 
 const WithdrawPage = () => {
@@ -48,7 +48,7 @@ const WithdrawPage = () => {
     amount: "",
     provider: "",
     phoneNumber: "",
-    currency: "USDT",
+    currency: "USDC",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -141,7 +141,7 @@ const WithdrawPage = () => {
 
       if (data.success) {
         setSuccess(data);
-        setFormData({ amount: "", provider: "", phoneNumber: "", currency: "USDT" });
+        setFormData({ amount: "", provider: "", phoneNumber: "", currency: "USDC" });
       } else {
         setError("Withdrawal failed. Please try again.");
       }

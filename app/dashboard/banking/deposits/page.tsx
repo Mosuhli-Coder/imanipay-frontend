@@ -37,8 +37,7 @@ interface DepositResponse {
 const CURRENCIES = [
   { value: "ALGO", label: "ALGO" },
   { value: "USDC", label: "USDC" },
-  { value: "USDT", label: "USDT" },
-  { value: "LSL", label: "LSL" },
+  // { value: "USDT", label: "USDT" },
 ];
 
 const DepositsPage = () => {
@@ -48,7 +47,7 @@ const DepositsPage = () => {
     amount: "",
     provider: "",
     phoneNumber: "",
-    currency: "USDT",
+    currency: "USDC",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -173,7 +172,7 @@ const DepositsPage = () => {
 
       if (data.success) {
         setSuccess(data);
-        setFormData({ amount: "", provider: "", phoneNumber: "", currency: "USDT" });
+        setFormData({ amount: "", provider: "", phoneNumber: "", currency: "USDC" });
       } else {
         setError("Deposit failed. Please try again.");
       }
