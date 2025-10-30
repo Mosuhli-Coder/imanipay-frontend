@@ -16,7 +16,7 @@ export default function Hero() {
             <div className="w-6 h-6 bg-gradient-to-r from-[#2775CA] to-[#0052FF] rounded-full flex items-center justify-center">
               <span className="text-white text-xs font-bold">U</span>
             </div>
-            <span className="text-gray-900 font-semibold text-xs">USDC</span>
+            <span className="text-gray-900 font-semibold text-xs">USDT</span>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@ export default function Hero() {
             <div className="w-6 h-6 bg-gradient-to-r from-[#0EBF8E] to-[#00A76F] rounded-full flex items-center justify-center">
               <span className="text-white text-xs font-bold">U</span>
             </div>
-            <span className="text-gray-900 font-semibold text-xs">USDT</span>
+            <span className="text-gray-900 font-semibold text-xs">USDC</span>
           </div>
         </div>
       </div>
