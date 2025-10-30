@@ -109,7 +109,7 @@ export default function WhyUs() {
         </div>
 
         {/* Stats Section */}
-        <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-3xl p-12 border border-teal-200 max-w-4xl mx-auto">
+        {/* <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-3xl p-12 border border-teal-200 max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-3xl md:text-4xl font-bold text-teal-600 mb-2">50K+</div>
@@ -128,7 +128,7 @@ export default function WhyUs() {
               <div className="text-gray-600 font-medium">Uptime</div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* CTA */}
         <div className="text-center mt-16">
