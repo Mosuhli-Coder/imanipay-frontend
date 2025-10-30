@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/general/Navbar";
 import Footer from "@/components/general/Footer";
-import { Toaster } from "@/components/ui/sonner";
+// import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "ImaniPay Africa",
@@ -18,7 +18,6 @@ export default function PagesLayout({
       <Navbar />
       {children}
       <Footer />
-      <Toaster />
     </div>
   );
 }
