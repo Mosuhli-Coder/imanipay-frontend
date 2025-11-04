@@ -78,7 +78,7 @@ const BalanceOverviewPage = () => {
   return (
     <main className="flex-1 overflow-auto relative z-10">
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
-        <h1 className="text-2xl font-bold mb-6">Balance Overview</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-900">Balance Overview</h1>
 
         <Card>
           <CardHeader>

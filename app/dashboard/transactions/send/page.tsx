@@ -224,7 +224,7 @@ const Page = () => {
     <div className="max-w-2xl mx-auto p-6 relative">
       <Card>
         <CardHeader>
-          <CardTitle>Send Money</CardTitle>
+          <CardTitle className="text-gray-900">Send Money</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
