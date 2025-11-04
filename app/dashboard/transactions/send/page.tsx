@@ -49,16 +49,23 @@ const Page = () => {
           return;
         }
 
-        // Get walletId from dashboard data stored in localStorage or context
+        // Get walletId from dashboard data stored in localStorage or fetch fresh data
         const dashboardDataString = localStorage.getItem("dashboardData");
         let walletId = "";
+        let dashboardData = null;
+
         if (dashboardDataString) {
           try {
-            const dashboardData = JSON.parse(dashboardDataString);
-            if (dashboardData.wallets && dashboardData.wallets.length > 0) {
-              walletId = dashboardData.wallets[0].id;
+            dashboardData = JSON.parse(dashboardDataString);
+            // Check if data is recent (less than 1 hour old)
+            const storedTime = localStorage.getItem("dashboardDataTimestamp");
+            const isRecent = storedTime && (Date.now() - parseInt(storedTime)) < 3600000; // 1 hour
 
-              console.log("Using wallets from localStorage:", dashboardData.wallet);
+            // Handle both 'wallets' (plural) and 'wallet' (singular) for backward compatibility
+            const wallets = dashboardData.wallets || dashboardData.wallet;
+            if (isRecent && wallets && Array.isArray(wallets) && wallets.length > 0) {
+              walletId = wallets[0].id;
+              console.log("Using wallets from localStorage:", wallets);
               console.log("Using walletId from localStorage:", walletId);
             }
           } catch (e) {
@@ -66,8 +73,42 @@ const Page = () => {
           }
         }
 
+        // If no valid walletId, fetch fresh dashboard data
         if (!walletId) {
-          toast.error("Wallet ID not found. Please visit dashboard first.");
+          console.log("Fetching fresh dashboard data...");
+          try {
+            const dashboardResponse = await fetch(API_ENDPOINTS.userDashboard, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (!dashboardResponse.ok) {
+              toast.error("Failed to fetch dashboard data. Please try again.");
+              return;
+            }
+
+            const dashboardResult = await dashboardResponse.json();
+            localStorage.setItem("dashboardData", JSON.stringify(dashboardResult));
+            localStorage.setItem("dashboardDataTimestamp", Date.now().toString());
+
+            if (dashboardResult.wallets && dashboardResult.wallets.length > 0) {
+              walletId = dashboardResult.wallets[0].id;
+              dashboardData = dashboardResult;
+              console.log("Fetched fresh walletId:", walletId);
+            } else {
+              toast.error("No wallets found. Please contact support.");
+              return;
+            }
+          } catch (error) {
+            toast.error("Failed to refresh dashboard data. Please check your connection.");
+            console.error("Error fetching dashboard data:", error);
+            return;
+          }
+        }
+
+        if (!walletId) {
+          toast.error("Wallet ID not found. Please try again.");
           return;
         }
 
@@ -81,6 +122,66 @@ const Page = () => {
         );
 
         if (!response.ok) {
+          if (response.status === 404) {
+            console.log("404 error - attempting to refresh dashboard data and retry");
+            toast.error("Wallet not found. Refreshing data...");
+
+            // Clear stale data
+            localStorage.removeItem("dashboardData");
+            localStorage.removeItem("dashboardDataTimestamp");
+
+            // Retry immediately with fresh data
+            try {
+              const dashboardResponse = await fetch(API_ENDPOINTS.userDashboard, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+
+              if (dashboardResponse.ok) {
+                const dashboardResult = await dashboardResponse.json();
+                localStorage.setItem("dashboardData", JSON.stringify(dashboardResult));
+                localStorage.setItem("dashboardDataTimestamp", Date.now().toString());
+
+                if (dashboardResult.wallets && dashboardResult.wallets.length > 0) {
+                  const newWalletId = dashboardResult.wallets[0].id;
+                  console.log("Retrying with fresh walletId:", newWalletId);
+
+                  // Retry the assets fetch with new walletId
+                  const retryResponse = await fetch(
+                    API_ENDPOINTS.blockchainWallets.getAssets(newWalletId),
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+
+                  if (retryResponse.ok) {
+                    const retryData = await retryResponse.json();
+                    if (retryData.success) {
+                      console.log("Retry successful:", retryData);
+                      setSenderWalletId(newWalletId);
+                      setAssets(retryData.data.balances || []);
+                      if (retryData.data.balances && retryData.data.balances.length > 0) {
+                        setFormData((prev) => ({
+                          ...prev,
+                          asset: retryData.data.balances[0].asset,
+                        }));
+                      }
+                      return; // Success, exit
+                    }
+                  }
+                }
+              }
+            } catch (retryError) {
+              console.error("Retry failed:", retryError);
+            }
+
+            // If retry failed, show final error
+            toast.error("Unable to load assets. Please refresh the page and try again.");
+            return;
+          }
           toast.error(`Failed to fetch assets: ${response.status} ${response.statusText}`);
           return;
         }
@@ -94,7 +195,7 @@ const Page = () => {
         const data = await response.json();
         if (data.success) {
           console.log(data);
-          setSenderWalletId(walletId || "");
+          setSenderWalletId(walletId);
           setAssets(data.data.balances || []);
           if (data.data.balances && data.data.balances.length > 0) {
             setFormData((prev) => ({
