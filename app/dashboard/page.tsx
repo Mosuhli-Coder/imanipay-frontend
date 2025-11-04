@@ -63,6 +63,41 @@ const DashboardPage = () => {
     }
   };
 
+  const refreshDashboardData = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication required");
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.userDashboard, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error(`Failed to refresh dashboard data: ${response.status}`);
+        return;
+      }
+
+      const data = await response.json();
+      setDashboardData(data);
+      localStorage.setItem("dashboardData", JSON.stringify(data));
+
+      // Update KYC modal state based on new data
+      if (data.user && !data.user.kycVerified) {
+        setShowKYCModal(true);
+      } else {
+        setShowKYCModal(false);
+      }
+    } catch (error) {
+      toast.error("An error occurred while refreshing dashboard data");
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       redirect("/login");
@@ -250,6 +285,7 @@ const DashboardPage = () => {
         isOpen={showKYCModal}
         onClose={() => setShowKYCModal(false)}
         walletAddress={dashboardData?.wallets[0]?.walletAddress || ""}
+        onVerificationComplete={refreshDashboardData}
       />
     </main>
   );
