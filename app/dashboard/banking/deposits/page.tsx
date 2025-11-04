@@ -332,6 +332,10 @@ const DepositsPage = () => {
             return "";
           })()
         }
+        onVerificationComplete={() => {
+          // Refresh the page to update KYC status
+          window.location.reload();
+        }}
       />
     </main>
   );

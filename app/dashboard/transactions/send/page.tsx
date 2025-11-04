@@ -326,6 +326,10 @@ const Page = () => {
             return "";
           })()
         }
+        onVerificationComplete={() => {
+          // Refresh the page to update KYC status
+          window.location.reload();
+        }}
       />
     </div>
   );
