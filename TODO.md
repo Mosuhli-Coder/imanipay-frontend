@@ -44,3 +44,35 @@
 - [x] Ensure form functionality remains intact
 - [x] Fix card visibility issues with black backgrounds
 - [x] Add shadows to sidebar and header for better visibility
+
+---
+
+# Fix Asset Fetching Issue in Production
+
+## Tasks
+- [x] Identify root cause: stale localStorage dashboardData from different environment
+- [x] Update fetchAssets function to check data freshness and refresh if needed
+- [x] Add retry logic for 404 "Wallet not found" errors
+- [x] Store timestamp with dashboardData to track freshness
+
+## Information Gathered
+- Asset fetching fails in production with 404 "Wallet not found"
+- Works in Postman, indicating backend is functional
+- walletId retrieved from localStorage "dashboardData" set on dashboard page
+- localStorage may contain data from localhost when deployed to production
+- NEXT_PUBLIC_SERVER_URL differs between environments
+
+## Plan
+- Modify fetchAssets in app/dashboard/transactions/send/page.tsx to:
+  - Check if dashboardData is recent (< 1 hour old)
+  - Fetch fresh dashboard data if walletId is missing or data is stale
+  - Handle 404 errors by clearing stale data and retrying
+  - Store timestamp with dashboardData for freshness tracking
+
+## Dependent Files
+- app/dashboard/transactions/send/page.tsx
+
+## Followup Steps
+- [ ] Test in production environment to verify assets load correctly
+- [ ] Monitor for any authentication or CORS issues
+- [ ] Ensure NEXT_PUBLIC_SERVER_URL is correctly set in production
