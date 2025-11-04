@@ -29,4 +29,8 @@ export const API_ENDPOINTS = {
   user: {
     profile: `${API_BASE_URL}/profile`,
   },
+  contact: {
+    sendMessage: `${API_BASE_URL}/contact/send-message`,
+  },
+  waitinglist: `${API_BASE_URL}/waiting-list/subscribe`,
 };
