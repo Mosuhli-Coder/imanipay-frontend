@@ -11,10 +11,10 @@ export default function ProfileHeader() {
           <User className="h-8 w-8 text-white" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Profile Settings
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             Update your personal information and contact details
           </p>
         </div>

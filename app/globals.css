@@ -54,12 +54,12 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #1a4d1a; /* Main green background from your logo */
+  --background: #ffffff; /* White background for dashboard pages */
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --card: oklch(0.985 0 0); /* White cards for better visibility */
+  --card-foreground: oklch(0.205 0 0); /* Dark text on white cards */
+  --popover: oklch(0.985 0 0);
+  --popover-foreground: oklch(0.205 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.269 0 0);
@@ -77,8 +77,8 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar: oklch(0.985 0 0); /* White sidebar background */
+  --sidebar-foreground: oklch(0.205 0 0); /* Dark text on sidebar */
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
@@ -130,7 +130,7 @@
     @apply bg-background text-foreground;
     font-display: swap;
     font-family: "Poppins", sans-serif;
-    background-color: #1a4d1a; /* Ensure green background */
+    background-color: #ffffff; /* White background for dashboard pages */
   }
 }
 
