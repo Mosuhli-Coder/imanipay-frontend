@@ -52,14 +52,14 @@ export default function LoginPage() {
 
     return (
         <PublicRoute>
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-white py-8">
                 {/* Logo at the top */}
                 <div className="mb-8 text-center">
                     <Link href="/" className="inline-block">
                         <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
                     </Link>
                 </div>
-                
+
                 {/* White form card with proper text colors */}
                 <Card className="w-full max-w-md shadow-lg bg-white">
                     <CardHeader>
@@ -95,17 +95,17 @@ export default function LoginPage() {
                             </div>
 
                             <div className="text-right">
-                                <a 
-                                    href="/forgot-password" 
+                                <a
+                                    href="/forgot-password"
                                     className="text-sm text-teal-600 hover:text-tealy-800 hover:underline"
                                 >
                                     Forgot password?
                                 </a>
                             </div>
 
-                            <Button 
-                                type="submit" 
-                                className="w-full bg-teal-600 hover:bg-teal-700 text-white" 
+                            <Button
+                                type="submit"
+                                className="w-full bg-teal-600 hover:bg-teal-700 text-white"
                                 disabled={isLoading}
                             >
                                 {isLoading ? 'Logging in...' : 'Login'}

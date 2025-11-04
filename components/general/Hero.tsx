@@ -75,10 +75,10 @@ export default function Hero() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight mb-6">
               Send Money Anywhere, <span className="text-[#00E7B3]">Instantly</span>
             </h1>
-            <p className="text-lg text-gray-300 mb-6 max-w-lg">
+            <p className="text-lg text-gray-600 mb-6 max-w-lg">
               No confusing steps. No hidden fees. Just peace of mind.
             </p>
-            <p className="text-lg text-gray-300 mb-10 max-w-lg">
+            <p className="text-lg text-gray-600 mb-10 max-w-lg">
               Join thousands of businesses already saving time and money with lower fees, faster transactions, and bank-level security.
             </p>
 

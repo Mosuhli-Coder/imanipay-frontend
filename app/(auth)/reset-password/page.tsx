@@ -17,7 +17,7 @@ export default function ResetPasswordPage() {
     return (
         <PublicRoute>
             <Suspense fallback={
-                <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+                <div className="min-h-screen flex flex-col items-center justify-center bg-white py-8">
                     <div className="mb-8 text-center">
                         <Link href="/" className="inline-block">
                             <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
@@ -101,7 +101,7 @@ function ResetPasswordContent() {
 
     if (isValidating) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-white py-8">
                 <div className="mb-8 text-center">
                     <Link href="/" className="inline-block">
                         <Image src="/images/Logo.png" alt="ImaniPay Logo" width={120} height={120} />
@@ -117,7 +117,7 @@ function ResetPasswordContent() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-white py-8">
             {/* Logo at the top */}
             <div className="mb-8 text-center">
                 <Link href="/" className="inline-block">

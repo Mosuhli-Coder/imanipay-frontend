@@ -63,7 +63,7 @@ export default function RegisterPage() {
 
   return (
     <PublicRoute>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white py-8">
         {/* Logo at the top */}
         <div className="mb-8 text-center">
           <Link href="/" className="inline-block">
