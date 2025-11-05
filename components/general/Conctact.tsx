@@ -156,7 +156,7 @@ export default function ContactPage() {
                                             onChange={handleChange}
                                             placeholder="John"
                                             required
-                                            className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50"
+                                            className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50 text-gray-900"
                                         />
                                     </div>
                                 </div>
@@ -171,7 +171,7 @@ export default function ContactPage() {
                                             onChange={handleChange}
                                             placeholder="Doe"
                                             required
-                                            className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50"
+                                            className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50 text-gray-900"
                                         />
                                     </div>
                                 </div>
@@ -188,7 +188,7 @@ export default function ContactPage() {
                                         onChange={handleChange}
                                         placeholder="john@company.com"
                                         required
-                                        className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50"
+                                        className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50 text-gray-900"
                                     />
                                 </div>
                             </div>
@@ -202,7 +202,7 @@ export default function ContactPage() {
                                         value={form.phoneNumber}
                                         onChange={handleChange}
                                         placeholder="+266 123 456 78"
-                                        className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50"
+                                        className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50 text-gray-900"
                                     />
                                 </div>
                             </div>
@@ -218,7 +218,7 @@ export default function ContactPage() {
                                         rows={5}
                                         placeholder="Tell us about your project or inquiry..."
                                         required
-                                        className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50 resize-none"
+                                        className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-300 bg-gray-50/50 text-gray-900 resize-none"
                                     />
                                 </div>
                             </div>
