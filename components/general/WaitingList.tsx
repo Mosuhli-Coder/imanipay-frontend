@@ -85,7 +85,7 @@ export default function WaitingList() {
                                             onChange={handleChange}
                                             required
                                             placeholder="Enter your email address"
-                                            className="pl-12 pr-4 py-4 h-14 text-lg border-2 border-gray-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 rounded-xl transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                                            className="pl-12 pr-4 py-4 h-14 text-lg border-2 border-gray-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 rounded-xl transition-all duration-300 bg-white/50 backdrop-blur-sm text-gray-900"
                                             disabled={isLoading}
                                         />
                                     </div>
