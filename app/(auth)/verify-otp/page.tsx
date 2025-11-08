@@ -159,7 +159,7 @@ export default function VerifyOtpPage() {
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     onPaste={(e) => handleOtpPaste(index, e)}
-                    className="w-12 h-12 text-center text-xl text-gray-900"
+                    className="w-12 h-12 text-center text-xl text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                     aria-label={`OTP digit ${index + 1}`}
                     required
                   />

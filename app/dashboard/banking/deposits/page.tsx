@@ -47,6 +47,7 @@ const DepositsPage = () => {
     amount: "",
     provider: "",
     phoneNumber: "",
+    countryCode: "+266",
     currency: "USDC",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -163,7 +164,7 @@ const DepositsPage = () => {
           walletId,
           amount: parseFloat(formData.amount),
           provider: formData.provider,
-          phoneNumber: formData.phoneNumber,
+          phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
           currency: formData.currency,
         }),
       });
@@ -172,7 +173,7 @@ const DepositsPage = () => {
 
       if (data.success) {
         setSuccess(data);
-        setFormData({ amount: "", provider: "", phoneNumber: "", currency: "USDC" });
+        setFormData({ amount: "", provider: "", phoneNumber: "", countryCode: "+266", currency: "USDC" });
       } else {
         setError("Deposit failed. Please try again.");
       }
@@ -266,14 +267,31 @@ const DepositsPage = () => {
 
                 <div>
                   <Label htmlFor="phoneNumber">Phone Number</Label>
-                  <Input
-                    id="phoneNumber"
-                    type="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-                    placeholder="Enter phone number"
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <Select
+                      value={formData.countryCode}
+                      onValueChange={(value) => handleInputChange("countryCode", value)}
+                    >
+                      <SelectTrigger className="w-28">
+                        <SelectValue placeholder="Code" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={"+266"}>+266 (LS)</SelectItem>
+                        <SelectItem value={"+254"}>+254 (KE)</SelectItem>
+                        <SelectItem value={"+255"}>+255 (TZ)</SelectItem>
+                        <SelectItem value={"+256"}>+256 (UG)</SelectItem>
+                        <SelectItem value={"+27"}>+27 (ZA)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="phoneNumber"
+                      type="tel"
+                      value={formData.phoneNumber}
+                      onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                      placeholder="Enter phone number"
+                      required
+                    />
+                  </div>
                 </div>
 
                 <Button type="submit" disabled={isSubmitting} className="w-full">
@@ -290,13 +308,13 @@ const DepositsPage = () => {
             <CardContent>
               {error && (
                 <Alert variant="destructive" className="mb-4">
-                  <AlertDescription>{error}</AlertDescription>
+                  <AlertDescription className="text-gray-900">{error}</AlertDescription>
                 </Alert>
               )}
 
               {success && (
                 <Alert className="mb-4">
-                  <AlertDescription>
+                  <AlertDescription className="text-gray-900">
                     <strong>Deposit Successful!</strong>
                     <br />
                     Transaction ID: {success.data.txId}
@@ -307,7 +325,7 @@ const DepositsPage = () => {
               )}
 
               {!error && !success && (
-                <p className="text-gray-500">
+                <p className="text-gray-700">
                   Fill out the form to make a deposit. Your transaction status will appear here.
                 </p>
               )}

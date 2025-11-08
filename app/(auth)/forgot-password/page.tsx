@@ -115,7 +115,7 @@ export default function ForgotPasswordPage() {
                                     required
                                     disabled={isLoading}
                                     placeholder="Enter your email"
-                                    className="text-gray-900"
+                                    className="text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                                 />
                             </div>
 

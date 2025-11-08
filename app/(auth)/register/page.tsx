@@ -88,7 +88,7 @@ export default function RegisterPage() {
                   value={formData.fullName}
                   onChange={handleChange}
                   required
-                  className="text-gray-900"
+                  className="text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -101,7 +101,7 @@ export default function RegisterPage() {
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   required
-                  className="text-gray-900"
+                  className="text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -115,7 +115,7 @@ export default function RegisterPage() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="text-gray-900"
+                  className="text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -129,7 +129,7 @@ export default function RegisterPage() {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="text-gray-900"
+                  className="text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -143,7 +143,7 @@ export default function RegisterPage() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
-                  className="text-gray-900"
+                  className="text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
               <Button
