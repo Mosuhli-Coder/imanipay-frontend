@@ -294,8 +294,8 @@ const DepositsPage = () => {
                   </div>
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="w-full">
-                  {isSubmitting ? "Processing..." : "Deposit"}
+                <Button type="submit" disabled={isSubmitting} className="w-full bg-teal-600 hover:bg-teal-700 text-white cursor-pointer">
+                  {isSubmitting ? "Processing..." : "Make Deposit"}
                 </Button>
               </form>
             </CardContent>

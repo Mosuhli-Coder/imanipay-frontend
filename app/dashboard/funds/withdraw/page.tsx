@@ -261,8 +261,8 @@ const WithdrawPage = () => {
                   </div>
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="w-full">
-                  {isSubmitting ? "Processing..." : "Withdraw"}
+                <Button type="submit" disabled={isSubmitting} className="w-full bg-teal-600 hover:bg-teal-700 text-white cursor-pointer">
+                  {isSubmitting ? "Processing..." : "Make Withdrawal"}
                 </Button>
               </form>
             </CardContent>
