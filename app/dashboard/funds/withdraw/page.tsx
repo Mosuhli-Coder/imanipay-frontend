@@ -132,7 +132,7 @@ const WithdrawPage = () => {
           amount: parseFloat(formData.amount),
           provider: formData.provider,
           phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
-          currency: formData.currency,
+          asset: formData.currency,
         }),
       });
 
@@ -142,7 +142,7 @@ const WithdrawPage = () => {
         setSuccess(data);
         setFormData({ amount: "", provider: "", phoneNumber: "", countryCode: "+266", currency: "USDC" });
       } else {
-        setError("Withdrawal failed. Please try again.");
+        setError(data.message || "Withdrawal failed. Please try again.");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -287,6 +287,10 @@ const WithdrawPage = () => {
                     Message: {success.data.message}
                     <br />
                     Payout Status: {success.data.payoutStatus}
+                    <br />
+                    Amount: {success.data.fiatAmount} {success.data.resolvedCurrency}
+                    <br />
+                    Source: {success.data.source}
                   </AlertDescription>
                 </Alert>
               )}
