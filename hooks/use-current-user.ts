@@ -7,6 +7,7 @@ interface ExtendedUser {
     email: string;
     fullName: string;
     phoneNumber: string;
+    kycVerified: boolean;
     first_name: string;
     last_name: string;
     image: string | null;

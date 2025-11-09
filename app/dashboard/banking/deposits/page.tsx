@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useAuth } from "@/context/AuthContext";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,10 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { API_ENDPOINTS } from "@/lib/api-config";
 import KYCModal from "@/components/dashboard/KYCModal";
 
+// --- INTERFACES ---
 interface Provider {
   id: string;
   name: string;
@@ -25,23 +27,30 @@ interface Provider {
   currency: string;
 }
 
-interface DepositResponse {
+interface DepositApiData {
   success: boolean;
-  data: {
-    success: boolean;
-    txId: string;
-    message: string;
-  };
+  txId?: string;
+  message?: string;
+  convertedAmount?: number;
+  resolvedCurrency?: string;
+  source?: string;
+  error?: string;
+}
+
+interface DepositApiResponse {
+  success: boolean;
+  data: DepositApiData;
+  message?: string;
 }
 
 const CURRENCIES = [
   { value: "ALGO", label: "ALGO" },
   { value: "USDC", label: "USDC" },
-  // { value: "USDT", label: "USDT" },
 ];
 
 const DepositsPage = () => {
-  const { loading, isAuthenticated } = useCurrentUser();
+  const { loading, isAuthenticated, user } = useCurrentUser();
+  const { refreshUser } = useAuth();
   const [providers, setProviders] = useState<Provider[]>([]);
   const [formData, setFormData] = useState({
     amount: "",
@@ -52,8 +61,10 @@ const DepositsPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<DepositResponse | null>(null);
+  const [success, setSuccess] = useState<DepositApiData | null>(null);
   const [showKYCModal, setShowKYCModal] = useState(false);
+
+  // --- Effects ---
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -85,27 +96,21 @@ const DepositsPage = () => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    // Check KYC status on page load
-    const dashboardDataString = localStorage.getItem("dashboardData");
-    if (dashboardDataString) {
-      try {
-        const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
-          setShowKYCModal(true);
-        }
-      } catch (e) {
-        console.error("Failed to parse dashboardData for KYC check", e);
-      }
+    // Show KYC modal based on user data from hook (which reflects the database via the hook's mechanism)
+    console.log('KYC Check - loading:', loading, 'user:', user, 'kycVerified:', user?.kycVerified);
+    if (!loading && user && !user.kycVerified) {
+      console.log('Showing KYC modal because user.kycVerified is false');
+      setShowKYCModal(true);
+    } else if (!loading && user && user.kycVerified) {
+      console.log('Not showing KYC modal because user.kycVerified is true');
     }
-  }, []);
+  }, [loading, user]);
 
   const getWalletAddress = () => {
     try {
       const dashboardData = localStorage.getItem("dashboardData");
-      console.log("Retrieved dashboard data:", dashboardData);
       if (dashboardData) {
         const parsed = JSON.parse(dashboardData);
-        console.log("Parsed dashboard data:", parsed);
         if (parsed.wallets && parsed.wallets.length > 0) {
           return parsed.wallets[0].walletAddress;
         }
@@ -113,33 +118,29 @@ const DepositsPage = () => {
     } catch (err) {
       console.error("Failed to get wallet address:", err);
     }
-    return "ANG5A64ZW7GCIWGYYX3RHBYE6G26Z6CSHREPMR3KC5VJA2OX7AVYK4TWSU"; // fallback
+    return "7Y7A5SZANQLP3E6OGQCN57J4TYE6JU6QB4DSGBZRXRO47JMEVDVLAK7VGU";
   };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // --- Submission Handler ---
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Check KYC status before proceeding
-    const dashboardDataString = localStorage.getItem("dashboardData");
-    if (dashboardDataString) {
-      try {
-        const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
-          setError("KYC verification is required to deposit funds. Please verify your identity first.");
-          setIsSubmitting(false);
-          return;
-        }
-      } catch (e) {
-        console.error("Failed to parse dashboardData for KYC check", e);
-      }
-    }
 
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
 
-    // Validate required fields
-    if (!formData.amount || !formData.provider || !formData.phoneNumber || !formData.currency) {
+    // Initial local validation
+    if (
+      !formData.amount ||
+      !formData.provider ||
+      !formData.phoneNumber ||
+      !formData.currency
+    ) {
       setError("Please fill all required fields.");
       setIsSubmitting(false);
       return;
@@ -165,29 +166,58 @@ const DepositsPage = () => {
           amount: parseFloat(formData.amount),
           provider: formData.provider,
           phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
-          currency: formData.currency,
+          asset: formData.currency,
         }),
       });
 
-      const data = await response.json();
+      const data: DepositApiResponse = await response.json();
 
-      if (data.success) {
-        setSuccess(data);
-        setFormData({ amount: "", provider: "", phoneNumber: "", countryCode: "+266", currency: "USDC" });
+      if (data.success && data.data && data.data.success) {
+        setSuccess(data.data);
+        setFormData({
+          amount: "",
+          provider: "",
+          phoneNumber: "",
+          countryCode: "+266",
+          currency: "USDC",
+        });
       } else {
-        setError("Deposit failed. Please try again.");
+        const errorMessage =
+          data.data?.error ||
+          data.message ||
+          "Deposit failed. Please check details and try again.";
+
+        // Server-side KYC validation failed
+        if (errorMessage.toLowerCase().includes("kyc")) {
+          setError(errorMessage);
+          setShowKYCModal(true);
+        } else {
+          setError(errorMessage);
+        }
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError("A network error occurred. Please try again.");
       console.error("Deposit error:", err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleVerificationComplete = async () => {
+    // Refresh the user data from the context to get the latest KYC status
+    // This will update the user state without needing a full page reload
+    console.log('KYC verification completed, refreshing user data...');
+    try {
+      await refreshUser();
+      console.log('User data refreshed, closing modal');
+      setShowKYCModal(false);
+    } catch (error) {
+      console.error("Failed to refresh user after KYC verification:", error);
+      // Fallback to page reload if refresh fails
+      window.location.reload();
+    }
   };
+
 
   if (loading) {
     return (
@@ -201,10 +231,14 @@ const DepositsPage = () => {
     return null;
   }
 
+  // --- Render ---
+
   return (
     <main className="flex-1 overflow-auto relative z-10">
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
-        <h1 className="text-2xl font-bold mb-6 text-gray-900">Mobile Money Deposits</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-900">
+          Mobile Money Deposits
+        </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
@@ -213,6 +247,27 @@ const DepositsPage = () => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Deposit Error</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                {success && (
+                  <Alert className="bg-green-50 border-green-300 text-green-800">
+                    <AlertTitle>Deposit Successful! 🎉</AlertTitle>
+                    <AlertDescription>
+                      Transaction ID: **{success.txId}**
+                      <br />
+                      Message: {success.message}
+                      <br />
+                      Converted Amount: **{success.convertedAmount}{" "}
+                      {success.resolvedCurrency}**
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 <div>
                   <Label htmlFor="amount">Amount ({formData.currency})</Label>
                   <Input
@@ -221,7 +276,9 @@ const DepositsPage = () => {
                     step="0.01"
                     min="0"
                     value={formData.amount}
-                    onChange={(e) => handleInputChange("amount", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("amount", e.target.value)
+                    }
                     placeholder="Enter amount"
                     required
                   />
@@ -231,7 +288,9 @@ const DepositsPage = () => {
                   <Label htmlFor="currency">Currency</Label>
                   <Select
                     value={formData.currency}
-                    onValueChange={(value) => handleInputChange("currency", value)}
+                    onValueChange={(value) =>
+                      handleInputChange("currency", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select currency" />
@@ -250,7 +309,9 @@ const DepositsPage = () => {
                   <Label htmlFor="provider">Provider</Label>
                   <Select
                     value={formData.provider}
-                    onValueChange={(value) => handleInputChange("provider", value)}
+                    onValueChange={(value) =>
+                      handleInputChange("provider", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select a provider" />
@@ -270,7 +331,9 @@ const DepositsPage = () => {
                   <div className="flex gap-2">
                     <Select
                       value={formData.countryCode}
-                      onValueChange={(value) => handleInputChange("countryCode", value)}
+                      onValueChange={(value) =>
+                        handleInputChange("countryCode", value)
+                      }
                     >
                       <SelectTrigger className="w-28">
                         <SelectValue placeholder="Code" />
@@ -287,14 +350,20 @@ const DepositsPage = () => {
                       id="phoneNumber"
                       type="tel"
                       value={formData.phoneNumber}
-                      onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("phoneNumber", e.target.value)
+                      }
                       placeholder="Enter phone number"
                       required
                     />
                   </div>
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="w-full bg-teal-600 hover:bg-teal-700 text-white cursor-pointer">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-teal-600 hover:bg-teal-700 text-white cursor-pointer"
+                >
                   {isSubmitting ? "Processing..." : "Make Deposit"}
                 </Button>
               </form>
@@ -306,27 +375,10 @@ const DepositsPage = () => {
               <CardTitle>Deposit Status</CardTitle>
             </CardHeader>
             <CardContent>
-              {error && (
-                <Alert variant="destructive" className="mb-4">
-                  <AlertDescription className="text-gray-900">{error}</AlertDescription>
-                </Alert>
-              )}
-
-              {success && (
-                <Alert className="mb-4">
-                  <AlertDescription className="text-gray-900">
-                    <strong>Deposit Successful!</strong>
-                    <br />
-                    Transaction ID: {success.data.txId}
-                    <br />
-                    Message: {success.data.message}
-                  </AlertDescription>
-                </Alert>
-              )}
-
               {!error && !success && (
                 <p className="text-gray-700">
-                  Fill out the form to make a deposit. Your transaction status will appear here.
+                  Fill out the form to make a deposit. Your transaction status
+                  will appear here.
                 </p>
               )}
             </CardContent>
@@ -336,24 +388,19 @@ const DepositsPage = () => {
       <KYCModal
         isOpen={showKYCModal}
         onClose={() => setShowKYCModal(false)}
-        walletAddress={
-          (() => {
-            try {
-              const dashboardDataString = localStorage.getItem("dashboardData");
-              if (dashboardDataString) {
-                const dashboardData = JSON.parse(dashboardDataString);
-                return dashboardData.wallets?.[0]?.walletAddress || "";
-              }
-            } catch (e) {
-              console.error("Failed to parse dashboardData for walletAddress", e);
+        walletAddress={(() => {
+          try {
+            const dashboardDataString = localStorage.getItem("dashboardData");
+            if (dashboardDataString) {
+              const dashboardData = JSON.parse(dashboardDataString);
+              return dashboardData.wallets?.[0]?.walletAddress || "";
             }
-            return "";
-          })()
-        }
-        onVerificationComplete={() => {
-          // Refresh the page to update KYC status
-          window.location.reload();
-        }}
+          } catch (e) {
+            console.error("Failed to parse dashboardData for walletAddress", e);
+          }
+          return "";
+        })()}
+        onVerificationComplete={handleVerificationComplete}
       />
     </main>
   );

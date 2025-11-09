@@ -9,6 +9,7 @@ interface User {
   email: string;
   fullName: string;
   phoneNumber: string;
+  kycVerified: boolean;
 }
 
 interface AuthContextType {
@@ -19,6 +20,7 @@ interface AuthContextType {
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, newPassword: string, confirmPassword: string) => Promise<void>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,7 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: payload.userId,
         email: payload.email,
         fullName: payload.fullName,
-        phoneNumber: payload.phoneNumber
+        phoneNumber: payload.phoneNumber,
+        kycVerified: payload.kycVerified || false
       };
     } catch (error) {
       console.error('❌ Failed to decode JWT:', error);
@@ -166,6 +169,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push('/');
   };
 
+  const refreshUser = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
+      // Decode token to get updated user data
+      const userData = decodeUserFromToken(token);
+      console.log('refreshUser - decoded userData:', userData);
+      if (userData) {
+        setUser(userData);
+      } else {
+        localStorage.removeItem('authToken');
+        setUser(null);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+    }
+  };
+
   // Debug current auth state
   const isAuthenticated = !!user;
 
@@ -179,6 +204,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         forgotPassword,
         resetPassword,
         logout,
+        refreshUser,
       }}
     >
       <div suppressHydrationWarning>

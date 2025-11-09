@@ -31,6 +31,9 @@ interface WithdrawResponse {
     success: boolean;
     message: string;
     payoutStatus: string;
+    fiatAmount: number;
+    resolvedCurrency: string;
+    source: string;
   };
 }
 
