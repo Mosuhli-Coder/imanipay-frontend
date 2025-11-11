@@ -118,6 +118,33 @@ const DashboardPage = () => {
           return;
         }
 
+        // Check if we have stored dashboard data for the current user
+        const storedDashboardData = localStorage.getItem("dashboardData");
+        if (storedDashboardData) {
+          try {
+            const parsedData = JSON.parse(storedDashboardData);
+            // Validate that the stored data belongs to the current user
+            if (parsedData.user && parsedData.user.id === user?.id) {
+              setDashboardData(parsedData);
+              // Auto-show KYC modal if user is not verified
+              if (parsedData.user && !parsedData.user.kycVerified) {
+                setShowKYCModal(true);
+              }
+              setLoadingData(false);
+              return;
+            } else {
+              // Data belongs to different user, clear it
+              localStorage.removeItem("dashboardData");
+              localStorage.removeItem("dashboardDataTimestamp");
+            }
+          } catch (error) {
+            console.error("Failed to parse stored dashboard data:", error);
+            localStorage.removeItem("dashboardData");
+            localStorage.removeItem("dashboardDataTimestamp");
+          }
+        }
+
+        // Fetch fresh data if no valid stored data
         const response = await fetch(API_ENDPOINTS.userDashboard, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -145,7 +172,7 @@ const DashboardPage = () => {
     };
 
     fetchDashboardData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.id]);
 
   if (loading || loadingData) {
     return (

@@ -31,14 +31,15 @@ interface WithdrawResponse {
     success: boolean;
     message: string;
     payoutStatus: string;
+    fiatAmount: number;
+    resolvedCurrency: string;
+    source: string;
   };
 }
 
 const CURRENCIES = [
-  { value: "ALGO", label: "ALGO" },
   { value: "USDC", label: "USDC" },
   // { value: "USDT", label: "USDT" },
- 
 ];
 
 const WithdrawPage = () => {
@@ -48,6 +49,7 @@ const WithdrawPage = () => {
     amount: "",
     provider: "",
     phoneNumber: "",
+    countryCode: "+266",
     currency: "USDC",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,36 +87,23 @@ const WithdrawPage = () => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    // Check KYC status on page load
+    // Check KYC status on page load - validate user ownership
     const dashboardDataString = localStorage.getItem("dashboardData");
     if (dashboardDataString) {
       try {
         const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
+        // Only use stored data if it belongs to the current user
+        if (dashboardData.user && dashboardData.user.id === user?.id && !dashboardData.user.kycVerified) {
           setShowKYCModal(true);
         }
       } catch (e) {
         console.error("Failed to parse dashboardData for KYC check", e);
       }
     }
-  }, []);
+  }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Check KYC status before proceeding
-    const dashboardDataString = localStorage.getItem("dashboardData");
-    if (dashboardDataString) {
-      try {
-        const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
-          setError("KYC verification is required to withdraw funds. Please verify your identity first.");
-          return;
-        }
-      } catch (e) {
-        console.error("Failed to parse dashboardData for KYC check", e);
-      }
-    }
 
     setIsSubmitting(true);
     setError(null);
@@ -132,8 +121,8 @@ const WithdrawPage = () => {
           userId: user?.id,
           amount: parseFloat(formData.amount),
           provider: formData.provider,
-          phoneNumber: formData.phoneNumber,
-          currency: formData.currency,
+          phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
+          asset: formData.currency,
         }),
       });
 
@@ -141,9 +130,9 @@ const WithdrawPage = () => {
 
       if (data.success) {
         setSuccess(data);
-        setFormData({ amount: "", provider: "", phoneNumber: "", currency: "USDC" });
+        setFormData({ amount: "", provider: "", phoneNumber: "", countryCode: "+266", currency: "USDC" });
       } else {
-        setError("Withdrawal failed. Please try again.");
+        setError(data.message || "Withdrawal failed. Please try again.");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -235,18 +224,35 @@ const WithdrawPage = () => {
 
                 <div>
                   <Label htmlFor="phoneNumber">Phone Number</Label>
-                  <Input
-                    id="phoneNumber"
-                    type="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-                    placeholder="Enter phone number"
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <Select
+                      value={formData.countryCode}
+                      onValueChange={(value) => handleInputChange("countryCode", value)}
+                    >
+                      <SelectTrigger className="w-28">
+                        <SelectValue placeholder="Code" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={"+266"}>+266 (LS)</SelectItem>
+                        <SelectItem value={"+254"}>+254 (KE)</SelectItem>
+                        <SelectItem value={"+255"}>+255 (TZ)</SelectItem>
+                        <SelectItem value={"+256"}>+256 (UG)</SelectItem>
+                        <SelectItem value={"+27"}>+27 (ZA)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="phoneNumber"
+                      type="tel"
+                      value={formData.phoneNumber}
+                      onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                      placeholder="Enter phone number"
+                      required
+                    />
+                  </div>
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="w-full">
-                  {isSubmitting ? "Processing..." : "Withdraw"}
+                <Button type="submit" disabled={isSubmitting} className="w-full bg-teal-600 hover:bg-teal-700 text-white cursor-pointer">
+                  {isSubmitting ? "Processing..." : "Make Withdrawal"}
                 </Button>
               </form>
             </CardContent>
@@ -259,24 +265,28 @@ const WithdrawPage = () => {
             <CardContent>
               {error && (
                 <Alert variant="destructive" className="mb-4">
-                  <AlertDescription>{error}</AlertDescription>
+                  <AlertDescription className="text-gray-900">{error}</AlertDescription>
                 </Alert>
               )}
 
               {success && (
                 <Alert className="mb-4">
-                  <AlertDescription>
+                  <AlertDescription className="text-gray-900">
                     <strong>Withdrawal Successful!</strong>
                     <br />
                     Message: {success.data.message}
                     <br />
                     Payout Status: {success.data.payoutStatus}
+                    <br />
+                    Amount: {success.data.fiatAmount} {success.data.resolvedCurrency}
+                    <br />
+                    Source: {success.data.source}
                   </AlertDescription>
                 </Alert>
               )}
 
               {!error && !success && (
-                <p className="text-gray-500">
+                <p className="text-gray-700">
                   Fill out the form to make a withdrawal. Your transaction status will appear here.
                 </p>
               )}
@@ -293,7 +303,10 @@ const WithdrawPage = () => {
               const dashboardDataString = localStorage.getItem("dashboardData");
               if (dashboardDataString) {
                 const dashboardData = JSON.parse(dashboardDataString);
-                return dashboardData.wallets?.[0]?.walletAddress || "";
+                // Validate that the stored data belongs to the current user
+                if (dashboardData.user && dashboardData.user.id === user?.id) {
+                  return dashboardData.wallets?.[0]?.walletAddress || "";
+                }
               }
             } catch (e) {
               console.error("Failed to parse dashboardData for walletAddress", e);

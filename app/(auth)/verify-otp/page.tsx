@@ -20,6 +20,8 @@ export default function VerifyOtpPage() {
     otp: ["", "", "", "", "", ""],
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const storedEmail = localStorage.getItem("verifyEmail");
     if (storedEmail) setFormData((p) => ({ ...p, email: storedEmail }));
@@ -89,6 +91,8 @@ export default function VerifyOtpPage() {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const payload = { email: formData.email, otp: Number(otpString) };
       const res = await fetch("/api/auth/verify-otp", {
@@ -109,6 +113,8 @@ export default function VerifyOtpPage() {
       router.push("/login");
     } catch (err: any) {
       toast.error(err.message || "Server error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -159,7 +165,7 @@ export default function VerifyOtpPage() {
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     onPaste={(e) => handleOtpPaste(index, e)}
-                    className="w-12 h-12 text-center text-xl text-gray-900"
+                    className="w-12 h-12 text-center text-xl text-gray-900 border border-gray-300 rounded-md bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                     aria-label={`OTP digit ${index + 1}`}
                     required
                   />
@@ -169,9 +175,10 @@ export default function VerifyOtpPage() {
 
             <Button
               type="submit"
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white cursor-pointer"
+              disabled={isLoading}
             >
-              Verify
+              {isLoading ? "Verifying..." : "Verify"}
             </Button>
           </form>
         </CardContent>
