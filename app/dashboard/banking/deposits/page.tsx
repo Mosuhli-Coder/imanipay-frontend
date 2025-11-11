@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { useAuth } from "@/context/AuthContext";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,6 @@ const CURRENCIES = [
 
 const DepositsPage = () => {
   const { loading, isAuthenticated, user } = useCurrentUser();
-  const { refreshToken } = useAuth();
   const [providers, setProviders] = useState<Provider[]>([]);
   const [formData, setFormData] = useState({
     amount: "",
@@ -124,7 +122,7 @@ const DepositsPage = () => {
     } catch (err) {
       console.error("Failed to get wallet address:", err);
     }
-    return "7Y7A5SZANQLP3E6OGQCN57J4TYE6JU6QB4DSGBZRXRO47JMEVDVLAK7VGU";
+    return "";
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -159,9 +157,6 @@ const DepositsPage = () => {
       return;
     }
 
-    // Get the selected provider to extract its currency
-    const selectedProvider = providers.find(p => p.id === formData.provider);
-    const providerCurrency = selectedProvider?.currency || "LSL";
 
     try {
       const token = localStorage.getItem("authToken");

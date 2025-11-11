@@ -20,7 +20,7 @@ interface Asset {
 }
 
 const Page = () => {
-  const { loading, isAuthenticated } = useCurrentUser();
+  const { loading, isAuthenticated, user } = useCurrentUser();
   const router = useRouter();
   const [formData, setFormData] = useState({
     receiverWalletAddress: "",
@@ -399,8 +399,8 @@ const Page = () => {
         </CardContent>
       </Card>
       {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-lg border">
             <h2 className="text-xl font-semibold mb-4">Confirm Transaction</h2>
             <p className="mb-2">Receiver Wallet Address: {formData.receiverWalletAddress}</p>
             <p className="mb-2">Amount: {formData.amount} {formData.asset}</p>
