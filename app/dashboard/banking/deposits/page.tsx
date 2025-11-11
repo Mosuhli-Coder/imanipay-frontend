@@ -50,7 +50,7 @@ const CURRENCIES = [
 
 const DepositsPage = () => {
   const { loading, isAuthenticated, user } = useCurrentUser();
-  const { refreshUser } = useAuth();
+  const { refreshToken } = useAuth();
   const [providers, setProviders] = useState<Provider[]>([]);
   const [formData, setFormData] = useState({
     amount: "",
@@ -96,22 +96,28 @@ const DepositsPage = () => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    // Show KYC modal based on user data from hook (which reflects the database via the hook's mechanism)
-    console.log('KYC Check - loading:', loading, 'user:', user, 'kycVerified:', user?.kycVerified);
-    if (!loading && user && !user.kycVerified) {
-      console.log('Showing KYC modal because user.kycVerified is false');
-      setShowKYCModal(true);
-    } else if (!loading && user && user.kycVerified) {
-      console.log('Not showing KYC modal because user.kycVerified is true');
+    // Check KYC status on page load - validate user ownership
+    const dashboardDataString = localStorage.getItem("dashboardData");
+    if (dashboardDataString) {
+      try {
+        const dashboardData = JSON.parse(dashboardDataString);
+        // Only use stored data if it belongs to the current user
+        if (dashboardData.user && dashboardData.user.id === user?.id && !dashboardData.user.kycVerified) {
+          setShowKYCModal(true);
+        }
+      } catch (e) {
+        console.error("Failed to parse dashboardData for KYC check", e);
+      }
     }
-  }, [loading, user]);
+  }, [user?.id]);
 
   const getWalletAddress = () => {
     try {
       const dashboardData = localStorage.getItem("dashboardData");
       if (dashboardData) {
         const parsed = JSON.parse(dashboardData);
-        if (parsed.wallets && parsed.wallets.length > 0) {
+        // Validate that the stored data belongs to the current user
+        if (parsed.user && parsed.user.id === user?.id && parsed.wallets && parsed.wallets.length > 0) {
           return parsed.wallets[0].walletAddress;
         }
       }
@@ -153,21 +159,32 @@ const DepositsPage = () => {
       return;
     }
 
+    // Get the selected provider to extract its currency
+    const selectedProvider = providers.find(p => p.id === formData.provider);
+    const providerCurrency = selectedProvider?.currency || "LSL";
+
     try {
       const token = localStorage.getItem("authToken");
+      
+      // Debug: Log the request body
+      const requestBody = {
+        walletId,
+        amount: parseFloat(formData.amount),
+        provider: formData.provider,
+        phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
+        asset: formData.currency,
+      };
+      
+      console.log("Deposit Request Body:", requestBody);
+      console.log("Auth Token (first 20 chars):", token?.substring(0, 20));
+      
       const response = await fetch(API_ENDPOINTS.mobileMoney.deposit, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          walletId,
-          amount: parseFloat(formData.amount),
-          provider: formData.provider,
-          phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
-          asset: formData.currency,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       const data: DepositApiResponse = await response.json();
@@ -203,22 +220,6 @@ const DepositsPage = () => {
     }
   };
 
-  const handleVerificationComplete = async () => {
-    // Refresh the user data from the context to get the latest KYC status
-    // This will update the user state without needing a full page reload
-    console.log('KYC verification completed, refreshing user data...');
-    try {
-      await refreshUser();
-      console.log('User data refreshed, closing modal');
-      setShowKYCModal(false);
-    } catch (error) {
-      console.error("Failed to refresh user after KYC verification:", error);
-      // Fallback to page reload if refresh fails
-      window.location.reload();
-    }
-  };
-
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -251,20 +252,6 @@ const DepositsPage = () => {
                   <Alert variant="destructive">
                     <AlertTitle>Deposit Error</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-
-                {success && (
-                  <Alert className="bg-green-50 border-green-300 text-green-800">
-                    <AlertTitle>Deposit Successful! 🎉</AlertTitle>
-                    <AlertDescription>
-                      Transaction ID: **{success.txId}**
-                      <br />
-                      Message: {success.message}
-                      <br />
-                      Converted Amount: **{success.convertedAmount}{" "}
-                      {success.resolvedCurrency}**
-                    </AlertDescription>
                   </Alert>
                 )}
 
@@ -375,6 +362,19 @@ const DepositsPage = () => {
               <CardTitle>Deposit Status</CardTitle>
             </CardHeader>
             <CardContent>
+              {success && (
+                <Alert className="bg-green-50 border-green-300 text-green-800">
+                  <AlertTitle>Deposit Successful! 🎉</AlertTitle>
+                  <AlertDescription>
+                    Transaction ID: **{success.txId}**
+                    <br />
+                    Message: {success.message}
+                    <br />
+                    Converted Amount: **{success.convertedAmount}{" "}
+                    {success.resolvedCurrency}**
+                  </AlertDescription>
+                </Alert>
+              )}
               {!error && !success && (
                 <p className="text-gray-700">
                   Fill out the form to make a deposit. Your transaction status
@@ -393,14 +393,20 @@ const DepositsPage = () => {
             const dashboardDataString = localStorage.getItem("dashboardData");
             if (dashboardDataString) {
               const dashboardData = JSON.parse(dashboardDataString);
-              return dashboardData.wallets?.[0]?.walletAddress || "";
+              // Validate that the stored data belongs to the current user
+              if (dashboardData.user && dashboardData.user.id === user?.id) {
+                return dashboardData.wallets?.[0]?.walletAddress || "";
+              }
             }
           } catch (e) {
             console.error("Failed to parse dashboardData for walletAddress", e);
           }
           return "";
         })()}
-        onVerificationComplete={handleVerificationComplete}
+        onVerificationComplete={() => {
+          // Refresh the page to update KYC status
+          window.location.reload();
+        }}
       />
     </main>
   );

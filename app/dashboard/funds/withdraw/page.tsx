@@ -87,36 +87,23 @@ const WithdrawPage = () => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    // Check KYC status on page load
+    // Check KYC status on page load - validate user ownership
     const dashboardDataString = localStorage.getItem("dashboardData");
     if (dashboardDataString) {
       try {
         const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
+        // Only use stored data if it belongs to the current user
+        if (dashboardData.user && dashboardData.user.id === user?.id && !dashboardData.user.kycVerified) {
           setShowKYCModal(true);
         }
       } catch (e) {
         console.error("Failed to parse dashboardData for KYC check", e);
       }
     }
-  }, []);
+  }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Check KYC status before proceeding
-    const dashboardDataString = localStorage.getItem("dashboardData");
-    if (dashboardDataString) {
-      try {
-        const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
-          setError("KYC verification is required to withdraw funds. Please verify your identity first.");
-          return;
-        }
-      } catch (e) {
-        console.error("Failed to parse dashboardData for KYC check", e);
-      }
-    }
 
     setIsSubmitting(true);
     setError(null);
@@ -316,7 +303,10 @@ const WithdrawPage = () => {
               const dashboardDataString = localStorage.getItem("dashboardData");
               if (dashboardDataString) {
                 const dashboardData = JSON.parse(dashboardDataString);
-                return dashboardData.wallets?.[0]?.walletAddress || "";
+                // Validate that the stored data belongs to the current user
+                if (dashboardData.user && dashboardData.user.id === user?.id) {
+                  return dashboardData.wallets?.[0]?.walletAddress || "";
+                }
               }
             } catch (e) {
               console.error("Failed to parse dashboardData for walletAddress", e);

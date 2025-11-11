@@ -8,6 +8,7 @@ interface ExtendedUser {
     fullName: string;
     phoneNumber: string;
     kycVerified: boolean;
+    kycStatus?: string;
     first_name: string;
     last_name: string;
     image: string | null;

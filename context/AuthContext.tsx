@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
 interface User {
   id: string;
@@ -10,6 +11,7 @@ interface User {
   fullName: string;
   phoneNumber: string;
   kycVerified: boolean;
+  kycStatus?: string;
 }
 
 interface AuthContextType {
@@ -21,6 +23,7 @@ interface AuthContextType {
   resetPassword: (token: string, newPassword: string, confirmPassword: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
+  refreshToken: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -50,7 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: payload.email,
         fullName: payload.fullName,
         phoneNumber: payload.phoneNumber,
-        kycVerified: payload.kycVerified || false
+        kycVerified: payload.kycVerified || false,
+        kycStatus: payload.kycStatus || undefined
       };
     } catch (error) {
       console.error('❌ Failed to decode JWT:', error);
@@ -165,6 +169,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('dashboardData');
+    localStorage.removeItem('dashboardDataTimestamp');
     setUser(null);
     router.push('/');
   };
@@ -191,6 +197,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const refreshToken = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
+      // Call the new KYC status endpoint to get updated token
+      const res = await fetch(API_ENDPOINTS.kyc.status, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.accessToken) {
+          // Store the new token
+          localStorage.setItem('authToken', data.accessToken);
+
+          // Decode and update user data
+          const userData = decodeUserFromToken(data.accessToken);
+          if (userData) {
+            setUser(userData);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh token:', error);
+    }
+  };
+
   // Debug current auth state
   const isAuthenticated = !!user;
 
@@ -205,6 +246,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         logout,
         refreshUser,
+        refreshToken,
       }}
     >
       <div suppressHydrationWarning>
