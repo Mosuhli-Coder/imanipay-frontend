@@ -109,7 +109,7 @@ const DepositsPage = () => {
     }
   }, [user?.id]);
 
-  const getWalletAddress = () => {
+  const getWalletAddress = async () => {
     try {
       const dashboardData = localStorage.getItem("dashboardData");
       if (dashboardData) {
@@ -122,6 +122,33 @@ const DepositsPage = () => {
     } catch (err) {
       console.error("Failed to get wallet address:", err);
     }
+
+    // If no valid wallet address found, fetch fresh dashboard data
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("No auth token");
+      }
+
+      const response = await fetch(API_ENDPOINTS.userDashboard, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const dashboardResult = await response.json();
+        localStorage.setItem("dashboardData", JSON.stringify(dashboardResult));
+        localStorage.setItem("dashboardDataTimestamp", Date.now().toString());
+
+        if (dashboardResult.wallets && dashboardResult.wallets.length > 0) {
+          return dashboardResult.wallets[0].walletAddress;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch fresh wallet address:", err);
+    }
+
     return "";
   };
 
@@ -150,7 +177,7 @@ const DepositsPage = () => {
       return;
     }
 
-    const walletId = getWalletAddress();
+    const walletId = await getWalletAddress();
     if (!walletId) {
       setError("Wallet address not found. Please log in again.");
       setIsSubmitting(false);
