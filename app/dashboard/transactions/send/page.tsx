@@ -20,7 +20,7 @@ interface Asset {
 }
 
 const Page = () => {
-  const { loading, isAuthenticated } = useCurrentUser();
+  const { loading, isAuthenticated, user } = useCurrentUser();
   const router = useRouter();
   const [formData, setFormData] = useState({
     receiverWalletAddress: "",
@@ -218,19 +218,20 @@ const Page = () => {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    // Check KYC status on page load
+    // Check KYC status on page load - validate user ownership
     const dashboardDataString = localStorage.getItem("dashboardData");
     if (dashboardDataString) {
       try {
         const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
+        // Only use stored data if it belongs to the current user
+        if (dashboardData.user && dashboardData.user.id === user?.id && !dashboardData.user.kycVerified) {
           setShowKYCModal(true);
         }
       } catch (e) {
         console.error("Failed to parse dashboardData for KYC check", e);
       }
     }
-  }, []);
+  }, [user?.id]);
 
   if (loading) {
     return (
@@ -252,12 +253,13 @@ const Page = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check KYC status before proceeding
+    // Check KYC status before proceeding - validate user ownership
     const dashboardDataString = localStorage.getItem("dashboardData");
     if (dashboardDataString) {
       try {
         const dashboardData = JSON.parse(dashboardDataString);
-        if (dashboardData.user && !dashboardData.user.kycVerified) {
+        // Only use stored data if it belongs to the current user
+        if (dashboardData.user && dashboardData.user.id === user?.id && !dashboardData.user.kycVerified) {
           toast.error("KYC verification is required to send money. Please verify your identity first.");
           return;
         }
@@ -397,8 +399,8 @@ const Page = () => {
         </CardContent>
       </Card>
       {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-lg border">
             <h2 className="text-xl font-semibold mb-4">Confirm Transaction</h2>
             <p className="mb-2">Receiver Wallet Address: {formData.receiverWalletAddress}</p>
             <p className="mb-2">Amount: {formData.amount} {formData.asset}</p>
@@ -419,7 +421,10 @@ const Page = () => {
               const dashboardDataString = localStorage.getItem("dashboardData");
               if (dashboardDataString) {
                 const dashboardData = JSON.parse(dashboardDataString);
-                return dashboardData.wallets?.[0]?.walletAddress || "";
+                // Validate that the stored data belongs to the current user
+                if (dashboardData.user && dashboardData.user.id === user?.id) {
+                  return dashboardData.wallets?.[0]?.walletAddress || "";
+                }
               }
             } catch (e) {
               console.error("Failed to parse dashboardData for walletAddress", e);

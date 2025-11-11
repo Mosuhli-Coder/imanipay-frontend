@@ -14,20 +14,21 @@ interface KYCModalProps {
   onVerificationComplete?: () => void; // Callback when verification is complete
 }
 
-const KYCModal: React.FC<KYCModalProps> = ({ 
-  isOpen, 
-  onClose, 
+const KYCModal: React.FC<KYCModalProps> = ({
+  isOpen,
+  onClose,
   walletAddress,
-  onVerificationComplete 
+  onVerificationComplete
 }) => {
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [verificationCompleted, setVerificationCompleted] = useState(false);
 
   // Check KYC status periodically when modal is open
   useEffect(() => {
-    if (!isOpen) {
-      // If modal is closed, stop polling immediately.
+    if (!isOpen || verificationCompleted) {
+      // If modal is closed or verification is completed, stop polling immediately.
       return;
     }
 
@@ -36,13 +37,11 @@ const KYCModal: React.FC<KYCModalProps> = ({
         const token = localStorage.getItem("authToken");
         if (!token) return;
 
-        const res = await fetch(API_ENDPOINTS.user.profile, { 
-          // CRITICAL FIX: Add 'no-cache' to force the browser to hit the server
-          // and prevent stale data from being returned locally.
-          cache: 'no-cache', 
-          headers: { 
+        const res = await fetch(API_ENDPOINTS.kyc.status, {
+          method: 'GET',
+          headers: {
             "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json" 
+            "Content-Type": "application/json"
           },
         });
 
@@ -50,10 +49,11 @@ const KYCModal: React.FC<KYCModalProps> = ({
           const data = await res.json();
           // Check if user is verified
           if (data.kycVerified || data.kycStatus === 'VERIFIED') {
-            
+            setVerificationCompleted(true);
+
             // 1. Call the parent's refresh function first.
             onVerificationComplete?.();
-            
+
             // 2. Then notify and close this modal.
             toast.success("Verification completed successfully!");
             onClose();
@@ -68,14 +68,18 @@ const KYCModal: React.FC<KYCModalProps> = ({
     checkKYCStatus();
 
     // Then check every 5 seconds
-    const interval = setInterval(checkKYCStatus, 5000);
+    const intervalId = setInterval(checkKYCStatus, 5000);
 
     // Cleanup: Clears the interval when the modal closes or dependencies change.
-    return () => clearInterval(interval);
-    
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+
     // Note: Ensure onClose and onVerificationComplete are wrapped in useCallback
     // in the parent component to prevent unnecessary re-runs of this effect.
-  }, [isOpen, onClose, onVerificationComplete]);
+  }, [isOpen, verificationCompleted, onClose, onVerificationComplete]);
 
   const copyToClipboard = async () => {
     try {

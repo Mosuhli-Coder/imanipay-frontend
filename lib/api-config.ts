@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
   },
   kyc: {
     start: `${API_BASE_URL}/kyc/persona/start`,
+    status: `${API_BASE_URL}/kyc/persona/status`,
   },
   user: {
     profile: `${API_BASE_URL}/profile`,
