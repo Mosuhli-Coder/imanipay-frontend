@@ -25,8 +25,25 @@ interface Transaction {
   };
 }
 
+interface Wallet {
+  id: string;
+  walletAddress: string;
+  status: string;
+}
+interface User {
+  id: string;
+  kycStatus: string;
+  kycVerified: boolean;
+}
+
+interface DashboardData {
+  user: User;
+  wallets: Wallet[];
+  recentTransactions: Transaction[];
+}
+
 const TransactionsPage = () => {
-  const { loading, isAuthenticated } = useCurrentUser();
+  const { user, loading, isAuthenticated } = useCurrentUser();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -54,15 +71,20 @@ const TransactionsPage = () => {
         // Try to get from localStorage first
         const dashboardDataString = localStorage.getItem("dashboardData");
         if (dashboardDataString) {
-          const dashboardData = JSON.parse(dashboardDataString);
-          if (dashboardData.wallets && dashboardData.wallets.length > 0) {
-            setWalletId(dashboardData.wallets[0].id);
-            return;
+          const dashboardData: DashboardData = JSON.parse(dashboardDataString);
+          // Validate that the stored data belongs to the current user
+          if (dashboardData.user && dashboardData.user.id === user?.id) {
+            if (dashboardData.wallets && dashboardData.wallets.length > 0) {
+              setWalletId(dashboardData.wallets[0].id);
+              return;
+            }
+          } else {
+            // Data belongs to different user, clear it
+            localStorage.removeItem("dashboardData");
           }
         }
 
-        // If not in localStorage, fetch from API
-        // Replace with your actual dashboard/wallet endpoint
+        // If not in localStorage or invalid, fetch from API
         const response = await fetch(API_ENDPOINTS.userDashboard, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,11 +96,11 @@ const TransactionsPage = () => {
           return;
         }
 
-        const data = await response.json();
-        if (data.success && data.data.wallets && data.data.wallets.length > 0) {
-          setWalletId(data.data.wallets[0].id);
-          // Optionally save to localStorage for future use
-          localStorage.setItem("dashboardData", JSON.stringify(data.data));
+        const data: DashboardData = await response.json();
+        if (data.wallets && data.wallets.length > 0) {
+          setWalletId(data.wallets[0].id);
+          // Save to localStorage for future use
+          localStorage.setItem("dashboardData", JSON.stringify(data));
         } else {
           toast.error("No wallets found. Please create a wallet first.");
         }
@@ -89,7 +111,7 @@ const TransactionsPage = () => {
     };
 
     fetchWalletId();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.id]);
 
   // Fetch transactions once we have walletId
   useEffect(() => {
