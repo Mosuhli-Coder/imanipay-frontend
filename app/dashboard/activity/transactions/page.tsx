@@ -31,6 +31,7 @@ const TransactionsPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loadingData, setLoadingData] = useState(false);
+  const [walletId, setWalletId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -38,35 +39,85 @@ const TransactionsPage = () => {
     }
   }, [loading, isAuthenticated]);
 
+  // Fetch wallet ID first
   useEffect(() => {
-    const fetchTransactions = async () => {
-      const dashboardDataString = localStorage.getItem("dashboardData");
-      if (!dashboardDataString) {
-        toast.error("Dashboard data not found. Please visit dashboard first.");
+    const fetchWalletId = async () => {
+      if (!isAuthenticated) return;
+
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication required");
         return;
       }
+
       try {
-        const dashboardData = JSON.parse(dashboardDataString);
-        if (!dashboardData.wallets || dashboardData.wallets.length === 0) {
-          toast.error("No wallets found in dashboard data.");
-          return;
+        // Try to get from localStorage first
+        const dashboardDataString = localStorage.getItem("dashboardData");
+        if (dashboardDataString) {
+          const dashboardData = JSON.parse(dashboardDataString);
+          if (dashboardData.wallets && dashboardData.wallets.length > 0) {
+            setWalletId(dashboardData.wallets[0].id);
+            return;
+          }
         }
-        const walletId = dashboardData.wallets[0].id;
-        setLoadingData(true);
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          toast.error("Authentication required");
-          return;
-        }
-        const response = await fetch(API_ENDPOINTS.blockchainWallets.getTransactions(walletId, page, 5), {
+
+        // If not in localStorage, fetch from API
+        // Replace with your actual dashboard/wallet endpoint
+        const response = await fetch(API_ENDPOINTS.userDashboard, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (!response.ok) {
+          toast.error("Failed to fetch wallet information");
+          return;
+        }
+
+        const data = await response.json();
+        if (data.success && data.data.wallets && data.data.wallets.length > 0) {
+          setWalletId(data.data.wallets[0].id);
+          // Optionally save to localStorage for future use
+          localStorage.setItem("dashboardData", JSON.stringify(data.data));
+        } else {
+          toast.error("No wallets found. Please create a wallet first.");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching wallet information");
+        console.error(error);
+      }
+    };
+
+    fetchWalletId();
+  }, [isAuthenticated]);
+
+  // Fetch transactions once we have walletId
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      if (!walletId) return;
+
+      setLoadingData(true);
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication required");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          API_ENDPOINTS.blockchainWallets.getTransactions(walletId, page, 5),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
         if (!response.ok) {
           toast.error(`Failed to fetch transactions: ${response.status}`);
           return;
         }
+
         const data = await response.json();
         if (data.success) {
           setTransactions(data.data.transactions);
@@ -82,12 +133,10 @@ const TransactionsPage = () => {
       }
     };
 
-    if (isAuthenticated) {
-      fetchTransactions();
-    }
-  }, [isAuthenticated, page]);
+    fetchTransactions();
+  }, [walletId, page]);
 
-  if (loading || loadingData) {
+  if (loading || (loadingData && !walletId)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-lg">Loading...</div>
@@ -127,17 +176,33 @@ const TransactionsPage = () => {
                       <div>
                         <p className="font-semibold">{transaction.description}</p>
                         <p className="text-sm text-gray-600">
-                          {transaction.type === "DEBIT" ? "Sent to" : "Received from"}: {transaction.type === "DEBIT" ? transaction.receiverWallet?.walletAddress || "" : transaction.senderWallet?.walletAddress || ""}
+                          {transaction.type === "DEBIT" ? "Sent to" : "Received from"}:{" "}
+                          {transaction.type === "DEBIT"
+                            ? transaction.receiverWallet?.walletAddress || ""
+                            : transaction.senderWallet?.walletAddress || ""}
                         </p>
                         <p className="text-sm text-gray-500">
                           {new Date(transaction.createdAt).toLocaleString()}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className={`font-mono ${transaction.type === "DEBIT" ? "text-red-600" : "text-green-600"}`}>
-                          {transaction.type === "DEBIT" ? "-" : "+"}{transaction.amount} {transaction.asset}
+                        <p
+                          className={`font-mono ${
+                            transaction.type === "DEBIT"
+                              ? "text-red-600"
+                              : "text-green-600"
+                          }`}
+                        >
+                          {transaction.type === "DEBIT" ? "-" : "+"}
+                          {transaction.amount} {transaction.asset}
                         </p>
-                        <span className={`px-2 py-1 rounded text-sm ${transaction.status === "SUCCESS" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
+                        <span
+                          className={`px-2 py-1 rounded text-sm ${
+                            transaction.status === "SUCCESS"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200 text-gray-800"
+                          }`}
+                        >
                           {transaction.status}
                         </span>
                       </div>
