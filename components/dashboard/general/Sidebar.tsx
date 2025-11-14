@@ -168,7 +168,7 @@ const AppSidebar: React.FC = () => {
 
     return (
         <aside
-            className={`fixed mt-16 flex flex-col lg:mt-0 top-0 left-0 bg-white dark:bg-[#0A0A0A] dark:text-gray-50 dark:border-[#121212] text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-teal-200 shadow-lg ${isExpanded || isMobileOpen
+            className={`fixed mt-16 flex flex-col lg:mt-0 top-0 left-0 bg-gradient-to-b from-teal-700 to-emerald-700 text-white h-screen transition-all duration-300 ease-in-out z-50 border-r border-teal-600/30 shadow-lg ${isExpanded || isMobileOpen
                 ? "w-[290px]"
                 : isHovered
                     ? "w-[290px]"
@@ -197,7 +197,7 @@ const AppSidebar: React.FC = () => {
                     <div className="flex flex-col gap-6">
                         <div>
                             <h2
-                                className={`mb-3 text-xs uppercase font-semibold leading-5 text-gray-400 flex items-center ${!isExpansionState ? "justify-center" : "justify-start"
+                                className={`mb-3 text-xs uppercase font-semibold leading-5 text-white/70 flex items-center ${!isExpansionState ? "justify-center" : "justify-start"
                                     }`}
                             >
                                 {isExpansionState ? "Main Menu" : <MoreHorizontal className="w-4 h-4" />}
@@ -207,7 +207,7 @@ const AppSidebar: React.FC = () => {
 
                         <div>
                             <h2
-                                className={`mb-3 text-xs uppercase font-semibold leading-5 text-gray-400 flex items-center ${!isExpansionState ? "justify-center" : "justify-start"
+                                className={`mb-3 text-xs uppercase font-semibold leading-5 text-white/70 flex items-center ${!isExpansionState ? "justify-center" : "justify-start"
                                     }`}
                             >
                                 {isExpansionState ? "Dashboard" : <MoreHorizontal className="w-4 h-4" />}
