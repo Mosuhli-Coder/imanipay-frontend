@@ -4,18 +4,17 @@
 import UserDropdown from "@/components/header/UserDropdown";
 import { useSidebar } from "@/context/SidebarContext";
 // import Link from "next/link";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
     X,
     Menu,
     MoreHorizontal,
-    Search,
 } from "lucide-react";
 
 const AppHeader: React.FC = () => {
     const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
     const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-    const inputRef = useRef<HTMLInputElement>(null);
+
 
     const handleToggle = () => {
         if (window.innerWidth >= 1024) {
@@ -29,18 +28,7 @@ const AppHeader: React.FC = () => {
         setApplicationMenuOpen(!isApplicationMenuOpen);
     };
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-                event.preventDefault();
-                inputRef.current?.focus();
-            }
-        };
-        document.addEventListener("keydown", handleKeyDown);
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, []);
+
 
     return (
         <header className="sticky top-0 flex w-full bg-gradient-to-r from-teal-700 to-emerald-700 border-b border-teal-600/30 z-99999 lg:border-b shadow-sm">
@@ -65,25 +53,7 @@ const AppHeader: React.FC = () => {
                         <MoreHorizontal className="w-5 h-5" />
                     </button>
 
-                    <div className="hidden lg:block">
-                        <form>
-                            <div className="relative">
-                                <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
-                                    <Search className="w-5 h-5 text-white/70" />
-                                </span>
-                                <input
-                                    ref={inputRef}
-                                    type="text"
-                                    placeholder="Search or type command..."
-                                    className="bg-white/10 backdrop-blur-sm h-11 w-full rounded-lg border border-white/30 text-white placeholder:text-white/70 focus:border-white/50 focus:outline-hidden focus:ring-3 focus:ring-white/20 xl:w-[430px]"
-                                />
-                                {/* <button className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-[#121212] dark:bg-white/[0.03] dark:text-gray-400">
-                                    <span> ⌘ </span>
-                                    <span> K </span>
-                                </button> */}
-                            </div>
-                        </form>
-                    </div>
+
                 </div>
 
                 <div
