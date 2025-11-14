@@ -1,3 +1,1 @@
-- [x] Update all input fields in components/general/Conctact.tsx and WaitingList.tsx to add explicit text color for visibility across browsers
-- [ ] Test text visibility in Chrome and other browsers
-- [ ] Ensure form submission works without delays (backend issue noted as resolved)
+- [x] Remove ThemeToggleButton from AppHeader.tsx: Remove the import statement and the component from the JSX in components/dashboard/general/AppHeader.tsx
